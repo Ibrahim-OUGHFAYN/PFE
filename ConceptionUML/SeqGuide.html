@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Diagramme de séquence - Guide, Système, Voyageur</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+</head>
+<body>
+  <div class="mermaid">
+    sequenceDiagram
+      participant Guide
+      participant Système
+      participant Voyageur
+
+      loop Tant que les informations sont incorrectes
+        Guide->>Système: S'authentifier
+          Système-->>Guide: Accès refusé
+      end
+      Système-->>Guide: Accès accordé
+
+      Guide->>Système: Demande réservations
+      Système-->>Guide: Afficher les réservations
+      Guide->>Système: Mettre à jour disponibilités
+      Système-->>Guide: Confirmation de mise à jour
+      Guide->>Système: Gérer profil
+      Système-->>Guide: Mise à jour confirmée
+      Guide->>Système: Contacter voyageur
+      Système->>Voyageur: Message du guide
+      Voyageur-->>Système: Répondre au guide
+      Système-->>Guide: Réponse du voyageur
+  </div>
+</body>
+</html>

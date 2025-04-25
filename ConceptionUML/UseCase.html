@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagramme de Cas d’Utilisation — Par Acteur</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      margin-bottom: 2rem;
+    }
+
+    .diagram-container {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      width: 80%;
+      max-width: 1200px;
+    }
+
+    pre.mermaid {
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h2>Diagramme de Cas d’Utilisation — Par Acteur</h2>
+
+  <div class="diagram-container">
+    
+    <!-- Voyageur Actor Diagram -->
+    <pre class="mermaid">
+      graph TD
+      classDef actor fill:#f9f,stroke:#333,stroke-width:1px;
+      classDef usecase fill:#fff,stroke:#333,stroke-width:1px,rx:10,ry:10;
+
+      voyageur[Voyageur]:::actor
+
+      explorer(("Explorer les lieux touristiques")):::usecase
+      reserver(("Réserver guide")):::usecase
+      profilV(("Gérer profil [voyageur]")):::usecase
+      avis(("Laisser un avis")):::usecase
+      notifications(("Recevoir des notifications")):::usecase
+      contacterGuide(("Contacter guide")):::usecase
+      voirReservations(("Voir ses réservations")):::usecase
+      authentifier(("Authentifier")):::usecase
+
+      voyageur --> explorer
+      voyageur --> reserver
+      voyageur --> profilV
+      voyageur --> avis
+      voyageur --> notifications
+      voyageur --> contacterGuide
+      voyageur --> voirReservations
+
+      explorer -.->|«include»| authentifier
+      reserver -.->|«include»| authentifier
+      profilV -.->|«include»| authentifier
+      avis -.->|«include»| authentifier
+      notifications -.->|«include»| authentifier
+      contacterGuide -.->|«include»| authentifier
+      voirReservations -.->|«include»| authentifier
+    </pre>
+
+    <!-- Guide Actor Diagram -->
+    <pre class="mermaid">
+      graph TD
+      classDef actor fill:#f9f,stroke:#333,stroke-width:1px;
+      classDef usecase fill:#fff,stroke:#333,stroke-width:1px,rx:10,ry:10;
+
+      guide[Guide]:::actor
+
+      disponibilites(("Mise à jour disponibilités")):::usecase
+      profilG(("Gérer profil [guide]")):::usecase
+      contacterVoyageur(("Contacter voyageurs")):::usecase
+      voirReservations(("Voir ses réservations")):::usecase
+      authentifier(("Authentifier")):::usecase
+
+      guide --> disponibilites
+      guide --> profilG
+      guide --> contacterVoyageur
+      guide --> voirReservations
+
+      disponibilites -.->|«include»| authentifier
+      profilG -.->|«include»| authentifier
+      contacterVoyageur -.->|«include»| authentifier
+      voirReservations -.->|«include»| authentifier
+    </pre>
+
+    <!-- Admin Actor Diagram -->
+    <pre class="mermaid">
+        graph TD
+        classDef actor fill:#f9f,stroke:#333,stroke-width:1px;
+        classDef usecase fill:#fff,stroke:#333,stroke-width:1px,rx:10,ry:10;
+      
+        admin[Admin]:::actor
+      
+        gererUsers(("Gérer les utilisateurs")):::usecase
+        supprimerUser(("Supprimer utilisateur")):::usecase
+      
+        gererLieux(("Gérer les lieux touristiques")):::usecase
+        ajouterLieu(("Ajouter lieu")):::usecase
+        supprimerLieu(("Supprimer lieu")):::usecase
+        modifierLieu(("Modifier lieux")):::usecase
+      
+        authentifier(("Authentifier")):::usecase
+      
+        admin --- gererUsers
+        admin --- gererLieux
+      
+        
+
+
+       supprimerUser -.->|«extend»| gererUsers
+      
+        
+        supprimerLieu -.->|«extend»| gererLieux
+        ajouterLieu -.->|«extend»| gererLieux
+        modifierLieu -.->|«extend»| gererLieux
+
+        gererUsers -.->|«include»| authentifier
+        gererLieux -.->|«include»| authentifier
+      </pre>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+</body>
+</html>

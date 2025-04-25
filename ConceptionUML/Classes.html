@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagramme de Classes UML</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+       
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="mermaid">
+            classDiagram
+
+            class Utilisateur {
+                +id: String
+                +nom: String
+                +email: String
+                +motDePasse: String
+                +role: String
+                +s'inscrire()
+                +seConnecter()
+                +modifierProfil()
+            }
+
+            class Message {
+                +id: String
+                +expéditeur: Utilisateur
+                +destinataire: Utilisateur
+                +contenu: String
+                +timestamp: Date
+                +envoyerMessage()
+            }
+
+            Utilisateur "1" -- "*" Message : envoie
+            Utilisateur "1" -- "*" Message : reçoit
+
+            class Voyageur {
+                +historiqueReservations: List
+                +réserverGuide()
+            }
+            Voyageur --|> Utilisateur 
+
+            class Guide {
+                +disponibilités: List
+                +avis: List
+                +mettreAJourDisponibilités()
+                +répondreMessage()
+            }
+
+            Guide --|> Utilisateur
+
+            class Administrateur {
+                +gérerUtilisateurs()
+                +gérerLieuxTouristiques()
+            }
+            Administrateur --|> Utilisateur 
+
+            class LieuTouristique {
+                +id: String
+                +nom: String
+                +description: String
+                +localisation: String
+                +ajouterLieu()
+                +modifierLieu()
+                +supprimerLieu()
+            }
+            Administrateur "1" -- "*" LieuTouristique : gère
+
+            class Réservation {
+                +id: String
+                +voyageur: Voyageur
+                +guide: Guide
+                +date: Date
+                +statut: String
+                +confirmer()
+                +annuler()
+            }
+            Voyageur "1" -- "*" Réservation : effectue
+            Guide "1" -- "*" Réservation : reçoit
+            
+            class Avis {
+                +id: String
+                +voyageur: Voyageur
+                +guide: Guide
+                +note: Int
+                +commentaire: String
+                +date: Date
+            }
+            Voyageur "1" -- "*" Avis : donne
+            Guide "1" -- "*" Avis : reçoit
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sequence Diagram</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+</head>
+<body>
+  <div class="mermaid">
+    sequenceDiagram
+      participant voyageur
+      participant server
+      participant stripe
+      participant guide
+
+      
+      loop Tant que les informations sont incorrectes
+        voyageur->>server: envoie login et password
+        server->>server: verifier infos
+        server-->>voyageur: acces impossible
+      end
+
+      
+      server-->>voyageur: Accès accordé
+
+      voyageur->>server: demande list des lieux selon ville
+      server-->>voyageur: afficher lieux
+      voyageur->>server: modifier profile
+      server-->>voyageur: mise a jour confirmer
+
+      voyageur->>server: Réserver guide
+      server->>stripe: effectuer paiement
+      stripe-->>server: Confirmation paiement
+      server-->>voyageur: Réservation confirmée
+
+      voyageur->>server: envoyer message au guide
+      server->>server: enregistrer message
+      server->>guide: envoyer message
+      guide-->>voyageur: Réponse guide
+
+      voyageur-->>server: Recevoir réponse
+      voyageur->>server: laisser avis
+      server-->>voyageur: avis enregistrée
+  </div>
+</body>
+</html>
