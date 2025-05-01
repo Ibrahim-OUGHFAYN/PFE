@@ -81,15 +81,7 @@ const login = async (req, res) => {
     }
 
     generateToken(user._id, res);
-
-    res.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      imgUrl: user.imgUrl,
-      role: user.role,
-    });
-  } catch (error) {
+   } catch (error) {
     console.log("Error in login controller", error.message);
     res.status(500).json({ msg: "server error" });
   }

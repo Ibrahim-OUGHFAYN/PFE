@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import UseUserStore from "../Store/useUserStore";
+import UseUserStore from "../Store/UseUserStore";
 
 const Register = () => {
   const [formData, setFormData] = useState({

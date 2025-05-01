@@ -4,14 +4,13 @@ import axios from "axios";
 
 const UseUserStore = create((set) => ({
   user: null,
-  loading: true,
 
   setUser: (userData) => set({ user: userData }),
 
   logout: async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/users/logout",
+        "http://localhost:5000/api/user/logout",
         {},
         { withCredentials: true }
       );
@@ -21,20 +20,19 @@ const UseUserStore = create((set) => ({
     }
   },
 
+  // Fetch the current user profile
   fetchUser: async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/users/user-profile",
-        {
-          withCredentials: true,
-        }
-      );
-      set({ user: res.data, loading: false });
+      const res = await axios.get("http://localhost:5000/api/user/user-profile", {
+        withCredentials: true,
+      });
+      set({ user: res.data });
     } catch (err) {
-      set({ loading: false });
+      console.error("Error fetching user:", err);
     }
   },
 
+  // Handle signup
   signup: async (formData) => {
     try {
       const payload = {
@@ -46,7 +44,7 @@ const UseUserStore = create((set) => ({
       };
 
       const response = await axios.post(
-        "http://localhost:5000/api/users/signup",
+        "http://localhost:5000/api/user/signup",
         payload,
         { withCredentials: true }
       );
@@ -66,14 +64,19 @@ const UseUserStore = create((set) => ({
     }
   },
 
-  login:async(data)=>{
+  // Login method: after successful login, fetch the user profile
+  login: async (data) => {
     try {
-      const res=await axios.post("http://localhost:5000/api/users/login",data,{ withCredentials: true })
+      const res = await axios.post("http://localhost:5000/api/user/login", data, {
+        withCredentials: true,
+      });
+
       if (res.status === 201 || res.status === 200) {
-        set({ user: res.data });
+        // After login success, fetch the user profile
+        await UseUserStore.getState().fetchUser();
         return { success: true };
       } else {
-        return { success: false, message: "Erreur lors de connexion." };
+        return { success: false, message: "Erreur lors de la connexion." };
       }
     } catch (error) {
       return {
@@ -81,8 +84,7 @@ const UseUserStore = create((set) => ({
         message: error.response?.data?.message || "Une erreur est survenue.",
       };
     }
-  }
-
+  },
 }));
 
 export default UseUserStore;

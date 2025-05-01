@@ -33,8 +33,18 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 connectDB(process.env.MONGO_URI);
 
 // Routes
-const userRoutes = require("./routes/UserRoutes");
-app.use("/api/users", userRoutes);
+const userRoutes = require("./routes/AuthRoutes");
+const UsersRoutes = require("./routes/UsersRoutes");
+const PlacesRoutes = require("./routes/PlacesRoutes");
+
+
+app.use("/api/user", userRoutes);
+app.use("/api/users", UsersRoutes);
+app.use("/api/places", PlacesRoutes);
+
+
+
+
 
 // Start the server
 const PORT = process.env.PORT || 5000;
