@@ -13,7 +13,6 @@
     sequenceDiagram
       participant voyageur
       participant server
-      participant stripe
       participant guide
 
       
@@ -32,9 +31,14 @@
       server-->>voyageur: mise a jour confirmer
 
       voyageur->>server: Réserver guide
-      server->>stripe: effectuer paiement
-      stripe-->>server: Confirmation paiement
-      server-->>voyageur: Réservation confirmée
+      server->>guide:Voir la réservation
+      alt confimre
+        guide-->>server: Confirmation reservation
+        server-->>voyageur: Réservation confirmée
+      else
+        guide-->>server:  Rejet de réservation 
+        server-->>voyageur: Réservation rejetée
+      end   
 
       voyageur->>server: envoyer message au guide
       server->>server: enregistrer message

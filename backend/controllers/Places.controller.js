@@ -10,42 +10,36 @@ const Places = async (req, res) => {
   }
 };
 
-
-
 const SupLieuParId = async (req, res) => {
   try {
-    // Find the place by its ID
+    // place par id
     const place = await Lieu.findById(req.params.id);
-    
+
     if (!place) {
       return res.status(404).json({ error: "Place not found" });
     }
 
-    // Debugging: Log the place and images
-    console.log("Deleting place:", place);
-    console.log("Images to delete:", place.images);
 
-    // Check if the place has images and proceed to delete them from Cloudinary
+    // ra adimsh les images g coudeinry
     if (place.images && place.images.length > 0) {
       for (const imageUrl of place.images) {
-        // Extract the public ID from the image URL
-        const publicId = imageUrl.split('/').pop().split('.')[0];
-        console.log("Deleting image from Cloudinary:", publicId);
+        const fileName = imageUrl.split("/").pop().split(".")[0];
+        const publicId = `lieu-touristique/${fileName}`;
 
-        // Delete the image from Cloudinary
+        console.log("Deleting image from Cloudinary:", publicId);
         const result = await cloudinary.uploader.destroy(publicId);
         console.log("Cloudinary delete result:", result);
       }
     }
 
-    // Finally, delete the place from the database
+    // ks adghar g bd
     await Lieu.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "Lieux et images supprimés avec succès" });
   } catch (err) {
     console.error("Error deleting place:", err);
     res.status(500).json({ error: "Erreur lors de la suppression de lieu" });
   }
-}
+};
 const AddPlace = async (req, res) => {
   try {
     const { nom, latitude, longitude, description, existingImages } = req.body;

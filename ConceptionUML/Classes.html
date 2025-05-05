@@ -49,6 +49,7 @@
             class Guide {
                 +disponibilités: List
                 +avis: List
+                +aventures:list
                 +mettreAJourDisponibilités()
                 +répondreMessage()
             }
@@ -64,8 +65,10 @@
             class LieuTouristique {
                 +id: String
                 +nom: String
+                +ville:String
                 +description: String
-                +localisation: String
+                +latitude:number
+                +longitude:number
                 +ajouterLieu()
                 +modifierLieu()
                 +supprimerLieu()
@@ -94,6 +97,7 @@
             }
             Voyageur "1" -- "*" Avis : donne
             Guide "1" -- "*" Avis : reçoit
+
         </div>
     </div>
 </body>

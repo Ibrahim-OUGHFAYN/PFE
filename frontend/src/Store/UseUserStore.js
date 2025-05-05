@@ -1,11 +1,21 @@
-// src/Store/useUserStore.js
 import { create } from "zustand";
 import axios from "axios";
 
 const UseUserStore = create((set) => ({
   user: null,
-
   setUser: (userData) => set({ user: userData }),
+
+  fetchUser: async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/user/me", {
+        withCredentials: true,
+      });
+      set({ user: res.data });
+    } catch (err) {
+      set({ user: null });
+      console.error("Erreur lors de la récupération de l'utilisateur :", err);
+    }
+  },
 
   logout: async () => {
     try {
@@ -20,19 +30,6 @@ const UseUserStore = create((set) => ({
     }
   },
 
-  // Fetch the current user profile
-  fetchUser: async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/user/user-profile", {
-        withCredentials: true,
-      });
-      set({ user: res.data });
-    } catch (err) {
-      console.error("Error fetching user:", err);
-    }
-  },
-
-  // Handle signup
   signup: async (formData) => {
     try {
       const payload = {
@@ -64,7 +61,6 @@ const UseUserStore = create((set) => ({
     }
   },
 
-  // Login method: after successful login, fetch the user profile
   login: async (data) => {
     try {
       const res = await axios.post("http://localhost:5000/api/user/login", data, {
@@ -72,8 +68,7 @@ const UseUserStore = create((set) => ({
       });
 
       if (res.status === 201 || res.status === 200) {
-        // After login success, fetch the user profile
-        await UseUserStore.getState().fetchUser();
+        set({ user: res.data });
         return { success: true };
       } else {
         return { success: false, message: "Erreur lors de la connexion." };

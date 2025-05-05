@@ -33,12 +33,12 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 connectDB(process.env.MONGO_URI);
 
 // Routes
-const userRoutes = require("./routes/AuthRoutes");
+const AuthRoutes = require("./routes/AuthRoutes");
 const UsersRoutes = require("./routes/UsersRoutes");
 const PlacesRoutes = require("./routes/PlacesRoutes");
 
 
-app.use("/api/user", userRoutes);
+app.use("/api/user", AuthRoutes);
 app.use("/api/users", UsersRoutes);
 app.use("/api/places", PlacesRoutes);
 

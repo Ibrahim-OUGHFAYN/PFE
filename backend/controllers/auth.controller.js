@@ -71,26 +71,33 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.status(400).json({ msg: "user not found!!!" });
-    }
-
     const isPwdCorrecte = await bcrypt.compare(password, user.password);
     if (!isPwdCorrecte) {
       return res.status(400).json({ msg: "mot de passe incorrecte" });
     }
 
     generateToken(user._id, res);
-   } catch (error) {
+
+    //rayazn l'objet n l'user
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      imgUrl: user.imgUrl,
+      role: user.role,
+    });
+
+  } catch (error) {
     console.log("Error in login controller", error.message);
     res.status(500).json({ msg: "server error" });
   }
 };
 
 
+
 module.exports = {
   signup,
-  getUser,
   logout,
   login,
+  getUser,
 };

@@ -1,7 +1,13 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Header from "./components1/Header";
@@ -9,50 +15,112 @@ import Forget from "./pages/Forget";
 import Reset from "./pages/Reset";
 import Guides from "./pages/Guides";
 import Footer from "./components1/Footer";
-import Admin from "./Admin/Admin";
+import AdminHome from "./Admin/Admin";
 import Profile from "./pages/ProfileGuide";
 import Places from "./pages/Places";
 import UpdateProfile from "./pages/UpdateProfile";
 import UseUserStore from "./Store/UseUserStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import Cookies from "js-cookie";
-import AdminUsers from "./Admin/AdminUsers"
-import AdminPlaces from "./Admin/AdminPlaces"
-import AddPlace from "./Admin/AddUpdatePlace"
+import AdminUsers from "./Admin/AdminUsers";
+import AdminPlaces from "./Admin/AdminPlaces";
+import AddPlace from "./Admin/AddUpdatePlace";
+import Loader from "./Loader";
+import GuideHome from "./guide/GuideHome";
 
-// Move this inside BrowserRouter context so useLocation can work
 const MainRoutes = () => {
   const user = UseUserStore((state) => state.user);
   const fetchUser = UseUserStore((state) => state.fetchUser);
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = Cookies.get("jwt");
-    if (!token) return;
-    fetchUser();
+    const loadUser = async () => {
+      const token = Cookies.get("jwt");
+      if (token) {
+        await fetchUser();
+      }
+      setLoading(false);
+    };
+    loadUser();
   }, []);
 
-  // Hide layout for /Admin page (you can add more paths here)
-  const hideLayout = location.pathname.startsWith("/Admin");
+  const isAdmin = user && user.role === "admin";
+  const isGuide = user && user.role === "guide";
+  const hideLayout =
+    location.pathname.startsWith("/Guide") ||
+    location.pathname.startsWith("/Admin");
+
+  if (loading) return <Loader />;
+
+  if (user && location.pathname === "/" && isAdmin) {
+    return <Navigate to="/Admin" />;
+  }
+  if (user && location.pathname === "/" && isGuide) {
+    return <Navigate to="/Guide" />;
+  }
 
   return (
     <>
       {!hideLayout && <Header />}
       <Routes>
         <Route index element={<App />} />
-        <Route path="/Login" element={user ? <Navigate to="/" /> : <Login />} />
-        <Route path="/Register" element={user ? <Navigate to="/" /> : <Register />} />
-        <Route path="/Forget" element={user ? <Navigate to="/" /> : <Forget />} />
-        <Route path="/Forget/Reset" element={user ? <Navigate to="/" /> : <Reset />} />
+        <Route path="/loader" element={<Loader />} />
+        {/* Auth  */}
+        <Route
+          path="/Login"
+          element={
+            user ? (
+              isAdmin ? (
+                <Navigate to="/Admin" />
+              ) : (
+                <Navigate to="/" />
+              )
+            ) : (
+              <Login />
+            )
+          }
+        />
+        <Route
+          path="/Register"
+          element={user ? <Navigate to="/" /> : <Register />}
+        />
+        <Route
+          path="/Forget"
+          element={user ? <Navigate to="/" /> : <Forget />}
+        />
+        <Route
+          path="/Forget/Reset"
+          element={user ? <Navigate to="/" /> : <Reset />}
+        />
+        {/* Public  */}
         <Route path="/Guides" element={<Guides />} />
-        <Route path="/Admin" element={user ? <Navigate to="/" /> : <Admin />} />
-        <Route path="/Admin/Users" element={user ? <Navigate to="/" /> : <AdminUsers />} />
-        <Route path="/Admin/Places" element={user ? <Navigate to="/" /> : <AdminPlaces />} />
-        <Route path="/Admin/Places/AddPlace" element={user ? <Navigate to="/" /> : <AddPlace />} />
-        <Route path="/Guides/Profile" element={<Profile />} />
         <Route path="/Places" element={<Places />} />
         <Route path="/update-profile" element={<UpdateProfile />} />
+        <Route path="/Guides/Profile" element={<Profile />} />
+        {/* Admin  */}
+        <Route
+          path="/Admin"
+          element={isAdmin ? <AdminHome /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/Admin/Users"
+          element={isAdmin ? <AdminUsers /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/Admin/Places"
+          element={isAdmin ? <AdminPlaces /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/Admin/Places/AddPlace"
+          element={isAdmin ? <AddPlace /> : <Navigate to="/" />}
+        />
+        {/*guide*/}
+        <Route
+          path="/Guide"
+          element={isGuide ? <GuideHome /> : <Navigate to="/" />}
+        />
       </Routes>
       {!hideLayout && <Footer />}
       <Toaster

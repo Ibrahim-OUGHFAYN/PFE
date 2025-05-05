@@ -10,7 +10,7 @@ const mySearch = ({ ph, onSearch }) => {
 
   return (
     <div
-      className="flex flex-col justify-center items-center border w-[90%] border-red-500 rounded-4xl h-40 bg-white shadow-2xl shadow-red-100 bg-no-repeat bg-cover bg-right"
+      className="flex flex-col justify-center items-center border w-[90%] border-red-500 rounded-4xl h-40 bg-white  bg-no-repeat bg-cover bg-right"
       style={{ backgroundImage: `url(${bg})` }}
     >
       <div className="flex flex-row w-[90%] gap-4">

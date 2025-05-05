@@ -9,15 +9,12 @@ import LogoComp from '../components1/LogoComp'
 import UseUserStore from "../Store/UseUserStore";
 import toast from "react-hot-toast";
 
-
-
-
 export default function Login() {
   const [formData, setFormData] = useState({
       email: "",
       password: "",
   });
-  const { login } = UseUserStore();
+  const { login,user } = UseUserStore();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -32,11 +29,9 @@ export default function Login() {
     const result = await login(formData);
 
     if (result.success) {
-      console.log("✅ toast about to fire"); 
       toast.success("Connecté avec succès")
-      navigate("/");
     } else {
-      toast.error("Connecté effuse")
+      toast.error(result.message)
     }
   };
 

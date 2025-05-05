@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HeaderAdmin from "./HeaderAdmin";
-import axios from "axios"; // Import axios
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 const AddPlaceForm = () => {
   const [nom, setNom] = useState("");
@@ -25,7 +27,7 @@ const AddPlaceForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const formData = new FormData();
     formData.append("nom", nom);
     formData.append("latitude", latitude);
@@ -39,11 +41,15 @@ const AddPlaceForm = () => {
 
     try {
       // Make a POST request to the backend API
-      const response = await axios.post("http://localhost:5000/api/places/Add", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/places/Add",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       // On successful response
       setSuccess("Place added successfully!");
@@ -145,9 +151,17 @@ const AddPlaceForm = () => {
 
         {/* Display loading, success, or error messages */}
         {loading && <p className="text-blue-500">Uploading...</p>}
-        {error && <p className="text-red-500">{error}</p>}
-        {success && <p className="text-green-500">{success}</p>}
+        {useEffect(() => {
+          if (error) {
+            toast.error(error);
+          }
+        }, [error])}
 
+        {useEffect(() => {
+          if (success) {
+            toast.success(success);
+          }
+        }, [success])}
         <Button
           type="submit"
           className="flex items-center justify-center gap-2 bg-red-500 text-white hover:bg-red-600 h-12 rounded-md"

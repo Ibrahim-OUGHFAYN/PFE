@@ -41,9 +41,11 @@ const UpdateProfile = () => {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen bg-transparent space-y-6">
-      <Card className="w-96 shadow-lg border-red-300 border shadow-2xl shadow-red-300">
+      <Card className="w-96  border-red-300 border shadow-2xl shadow-red-300">
         <CardHeader>
-          <CardTitle className="text-center capitalize">mettre à jour le profil</CardTitle>
+          <CardTitle className="text-center capitalize">
+            mettre à jour le profil
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -72,24 +74,18 @@ const UpdateProfile = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="image">Image de profil</Label>
-              <Input
+              <label
+                htmlFor="image-upload"
+                className="inline-flex items-center gap-2 px-36 py-2 bg-gray-50 border border-gray-300 rounded cursor-pointer hover:bg-gray-200 text-gray-700 w-fit "
+              >
+                <span>Profile</span>
+              </label>
+              <input
+                id="image-upload"
                 type="file"
-                name="image"
-                id="image"
+                multiple
                 accept="image/*"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Mot de passe</Label>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Nouveau mot de passe"
+                className="hidden"
               />
             </div>
             <Button

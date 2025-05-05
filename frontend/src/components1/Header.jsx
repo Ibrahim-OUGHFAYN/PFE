@@ -11,16 +11,22 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Loader from "../Loader"; // ⬅️ Import your loader
 
 const Header = () => {
   const { user, logout, fetchUser } = UseUserStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(true); // loader state
 
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    fetchUser();
+    const loadUser = async () => {
+      await fetchUser();
+      setLoading(false);
+    };
+    loadUser();
   }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -75,6 +81,15 @@ const Header = () => {
     </DropdownMenu>
   );
 
+  // Show loader while fetching user
+  if (loading) {
+    return (
+      <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-white z-50">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <nav className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-between p-4 shadow-md bg-gray-100 rounded-full w-[90%] max-w-15xl">
       <div className="pl-3">
@@ -103,7 +118,7 @@ const Header = () => {
       )}
 
       <div className="hidden lg:flex gap-4 items-center">
-        <Button variant="ghost" className="hover:text-red-500 cursor-pointer"  onClick={() => handleScroll("hero")}>Accueil</Button>
+        <Button variant="ghost" className="hover:text-red-500 cursor-pointer" onClick={() => handleScroll("hero")}>Accueil</Button>
         <Button variant="ghost" className="hover:text-red-500 cursor-pointer" onClick={() => handleScroll("about")}>À propos</Button>
         <Button variant="ghost" className="hover:text-red-500 cursor-pointer" onClick={() => handleScroll("contact")}>Contact</Button>
         <Bs />
@@ -111,8 +126,8 @@ const Header = () => {
           <ProfileDropdown />
         ) : (
           <>
-            <Button className="bg-red-500 hover:bg-red-300" onClick={() => navigate("/login")}>Se connecter</Button>
-            <Button className="border border-red-500 bg-white text-black hover:bg-red-300" onClick={() => navigate("/register")}>S'inscrire</Button>
+            <Button className="bg-red-500 hover:bg-red-300 rounded-full" onClick={() => navigate("/login")}>Se connecter</Button>
+            <Button className="border border-red-500 bg-white text-black hover:bg-red-300 rounded-full" onClick={() => navigate("/register")}>S'inscrire</Button>
           </>
         )}
       </div>
