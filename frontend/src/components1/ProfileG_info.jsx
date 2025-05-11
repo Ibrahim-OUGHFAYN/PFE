@@ -8,7 +8,7 @@ import img from "../assets/ayoub.png";
 
 export default function ProfileGuide({Guide}) {
   return (
-    <Card className="relative w-full  max-w-6xl flex flex-col md:flex-row  max-w-4xl p-6 rounded-2xl border-red-500 gap-6 items-center mt-25">
+    <Card className="relative w-full  flex flex-col md:flex-row  max-w-4xl p-6 rounded-2xl border-red-500 gap-6 items-center mt-25">
       {/* img+inofs */}
       <div className="flex flex-col md:flex-row flex-1 items-start gap-4">
         {/* img */}
@@ -47,7 +47,7 @@ export default function ProfileGuide({Guide}) {
         {/* loghat */}
         <div className="flex flex-col items-center">
           <Globe className="w-6 h-6 text-gray-600" />
-          <span className="text-sm text-gray-700 mt-1 font-bold text-red-700">
+          <span className="text-sm text-gray-700 mt-1 font-bold">
             Langues
           </span>
           <div className="flex flex-wrap justify-center w-40">
@@ -63,7 +63,7 @@ export default function ProfileGuide({Guide}) {
         {/* exp */}
         <div className="flex flex-col items-center justify-center">
           <Briefcase className="w-6 h-6 text-gray-600" />
-          <span className="text-sm text-gray-700 mt-1 font-bold text-red-700">
+          <span className="text-sm  mt-1 font-bold text-red-700">
             Guide Depuis
           </span>
           <span className="text-sm text-gray-700 mt-1">{Guide.exp} ans</span>
@@ -72,7 +72,7 @@ export default function ProfileGuide({Guide}) {
         {/* avis */}
         <div className="flex flex-col items-center">
           <MessageCircle className="w-6 h-6 text-gray-600" />
-          <span className="text-sm text-gray-700 mt-1 font-bold text-red-700">
+          <span className="text-sm mt-1 font-bold text-red-700">
             Avis
           </span>
           <span className="text-sm text-gray-700 mt-1">

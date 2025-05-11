@@ -88,7 +88,7 @@ export default function Bs({ onNavigate }) {
             Explorer Maroc
           </Button>
           <Button
-            onClick={() => handleClick("/Guides")}
+            onClick={() => handleClick("/guides")}
             variant="ghost"
             className="block w-full text-left text-gray-700 hover:text-red-500 transition hover:bg-gray-100 px-4 py-2 rounded-md"
           >

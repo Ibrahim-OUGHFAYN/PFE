@@ -1,20 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import HeaderAdmin from "./HeaderAdmin";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
 
 const AddPlaceForm = () => {
+  const { id } = useParams(); // If present, we're in edit mode
+  const navigate = useNavigate();
+
   const [nom, setNom] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [description, setDescription] = useState("");
-  const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState(null); // Error state
-  const [success, setSuccess] = useState(null); // Success state
+  const [images, setImages] = useState([]); // Can contain both URLs and File objects
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Load place data if in edit mode
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`http://localhost:5000/api/places/${id}`)
+        .then((res) => {
+          const place = res.data;
+          setNom(place.nom);
+          setLatitude(place.latitude);
+          setLongitude(place.longitude);
+          setDescription(place.description);
+          setImages(place.images || []);
+        })
+        .catch((err) => {
+          console.error("Erreur lors du chargement :", err);
+          toast.error("Erreur lors du chargement du lieu.");
+        });
+    }
+  }, [id]);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -33,42 +54,54 @@ const AddPlaceForm = () => {
     formData.append("latitude", latitude);
     formData.append("longitude", longitude);
     formData.append("description", description);
-    images.forEach((file) => formData.append("images", file));
 
-    setLoading(true); // Set loading to true when the API call starts
-    setError(null); // Reset error
-    setSuccess(null); // Reset success
+    images.forEach((img) => {
+      if (typeof img !== "string") {
+        formData.append("images", img); // Only upload new files
+      }
+    });
+
+    // Also include old image URLs if in edit mode
+    if (id) {
+      const oldImages = images.filter((img) => typeof img === "string");
+      formData.append("oldImages", JSON.stringify(oldImages));
+    }
+
+    setLoading(true);
+    setError(null);
 
     try {
-      // Make a POST request to the backend API
-      const response = await axios.post(
-        "http://localhost:5000/api/places/Add",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      // On successful response
-      setSuccess("Place added successfully!");
-      setNom("");
-      setLatitude("");
-      setLongitude("");
-      setDescription("");
-      setImages([]);
+      if (id) {
+        await axios.put(
+          `http://localhost:5000/api/places/update/${id}`,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        toast.success("Lieu mis à jour avec succès !");
+      } else {
+        await axios.post(
+          "http://localhost:5000/api/places/Add",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        toast.success("Lieu ajouté avec succès !");
+      }
+      navigate("/Admin/Places");
     } catch (err) {
-      // On error
-      setError("Failed to add place. Please try again.");
+      console.error(err);
+      setError("Échec de l'opération.");
+      toast.error("Échec de l'opération.");
     } finally {
-      setLoading(false); // Reset loading state after the request completes
+      setLoading(false);
     }
   };
 
   return (
     <>
-      <HeaderAdmin name="ajouter lieu" />
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-5 bg-white p-6 rounded-lg shadow-md w-full max-w-xl mx-auto mt-5 border hover:shadow-2xl hover:shadow-red-300 transition duration-300 border-red-500"
@@ -89,7 +122,7 @@ const AddPlaceForm = () => {
             value={latitude}
             onChange={(e) => setLatitude(e.target.value)}
             required
-            className="w-1/2 border border-gray-300 rounded px-4 py-2  hover:border-red-500"
+            className="w-1/2 border border-gray-300 rounded px-4 py-2 hover:border-red-500"
           />
           <input
             type="text"
@@ -97,7 +130,7 @@ const AddPlaceForm = () => {
             value={longitude}
             onChange={(e) => setLongitude(e.target.value)}
             required
-            className="w-1/2 border border-gray-300 rounded px-4 py-2  hover:border-red-500"
+            className="w-1/2 border border-gray-300 rounded px-4 py-2 hover:border-red-500"
           />
         </div>
 
@@ -107,13 +140,13 @@ const AddPlaceForm = () => {
           onChange={(e) => setDescription(e.target.value)}
           rows="4"
           required
-          className="border border-gray-300 rounded px-4 py-2  hover:border-red-500"
+          className="border border-gray-300 rounded px-4 py-2 hover:border-red-500"
         ></textarea>
 
         <div>
           <label
             htmlFor="image-upload"
-            className="inline-flex items-center gap-2 px-45 py-2 bg-gray-50 border border-gray-300 rounded cursor-pointer hover:bg-gray-200 text-gray-700 w-fit "
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-300 rounded cursor-pointer hover:bg-gray-200 text-gray-700 w-fit"
           >
             <PlusCircle className="w-5 h-5 text-red-800" />
             <span>Ajouter des images</span>
@@ -129,10 +162,10 @@ const AddPlaceForm = () => {
           {/* Display selected images */}
           {images.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-              {images.map((file, index) => (
+              {images.map((img, index) => (
                 <div key={index} className="relative">
                   <img
-                    src={URL.createObjectURL(file)}
+                    src={typeof img === "string" ? img : URL.createObjectURL(img)}
                     alt={`preview-${index}`}
                     className="w-full h-32 object-cover rounded-md border"
                   />
@@ -149,25 +182,15 @@ const AddPlaceForm = () => {
           )}
         </div>
 
-        {/* Display loading, success, or error messages */}
-        {loading && <p className="text-blue-500">Uploading...</p>}
-        {useEffect(() => {
-          if (error) {
-            toast.error(error);
-          }
-        }, [error])}
+        {loading && <p className="text-blue-500">En cours...</p>}
+        {error && <p className="text-red-500">{error}</p>}
 
-        {useEffect(() => {
-          if (success) {
-            toast.success(success);
-          }
-        }, [success])}
         <Button
           type="submit"
           className="flex items-center justify-center gap-2 bg-red-500 text-white hover:bg-red-600 h-12 rounded-md"
         >
           <PlusCircle className="w-5 h-5" />
-          Ajouter
+          {id ? "Mettre à jour" : "Ajouter"}
         </Button>
       </form>
     </>

@@ -57,13 +57,13 @@
       voirReservations(("Voir ses réservations")):::usecase
       authentifier(("Authentifier")):::usecase
 
-      voyageur --> explorer
-      voyageur --> reserver
-      voyageur --> profilV
-      voyageur --> avis
-      voyageur --> notifications
-      voyageur --> contacterGuide
-      voyageur --> voirReservations
+      voyageur --- explorer
+      voyageur --- reserver
+      voyageur --- profilV
+      voyageur --- avis
+      voyageur --- notifications
+      voyageur --- contacterGuide
+      voyageur --- voirReservations
 
       explorer -.->|«include»| authentifier
       reserver -.->|«include»| authentifier
@@ -88,10 +88,10 @@
       voirReservations(("Voir ses réservations")):::usecase
       authentifier(("Authentifier")):::usecase
 
-      guide --> disponibilites
-      guide --> profilG
-      guide --> contacterVoyageur
-      guide --> voirReservations
+      guide --- disponibilites
+      guide --- profilG
+      guide --- contacterVoyageur
+      guide --- voirReservations
 
       disponibilites -.->|«include»| authentifier
       profilG -.->|«include»| authentifier

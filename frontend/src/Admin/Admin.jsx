@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import HeaderAdmin from "./HeaderAdmin";
+import HeaderAdmin from "./HomeAdmin";
 import UseUserStore from "../Store/UseUserStore";
 
 const admin_name = "bonjour ibrahim";

@@ -1,13 +1,13 @@
-const cloudinary = require("../config/Cloudinary.js"); // Ensure Cloudinary is required
-const Lieu = require("../models/Place.js");
+const cloudinary = require("../config/Cloudinary.js");
+const User = require("../models/User.js");
 const fs = require("fs");
 
-const Places = async (req, res) => {
+const Guides = async (req, res) => {
   try {
-    const places = await Lieu.find({});
-    res.json(places);
+    const guides = await User.find({role:"guide"});
+    res.json(guides);
   } catch (error) {
-    console.error("Error fetching places:", error);
+    console.error("Error fetching guides:", error);
     res.status(500).json({ error: "Server error" });
   }
 };
@@ -216,7 +216,7 @@ const getPlaceById = async (req, res) => {
 
 
 module.exports = {
-  Places,
+  Guides,
   SupLieuParId,
   AddPlace,
   updatePlace,

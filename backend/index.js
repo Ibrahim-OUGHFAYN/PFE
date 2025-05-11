@@ -36,11 +36,13 @@ connectDB(process.env.MONGO_URI);
 const AuthRoutes = require("./routes/AuthRoutes");
 const UsersRoutes = require("./routes/UsersRoutes");
 const PlacesRoutes = require("./routes/PlacesRoutes");
+const Guidesroutes =require("./routes/GuidesRoutes")
 
 
 app.use("/api/user", AuthRoutes);
 app.use("/api/users", UsersRoutes);
 app.use("/api/places", PlacesRoutes);
+app.use("/api/guides",Guidesroutes)
 
 
 

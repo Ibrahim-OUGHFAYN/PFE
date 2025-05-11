@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Search, Plus, Loader } from "lucide-react"; // Import Loader from lucide-react
-import HeaderAdmin from "./HeaderAdmin";
+import HeaderAdmin from "./HomeAdmin";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
-const AdminUsers = () => {
+const AdminPlaces = () => {
   const navigate = useNavigate();
   const [places, setPlaces] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,8 +53,6 @@ const AdminUsers = () => {
 
   return (
     <>
-      <HeaderAdmin name="Gérer les lieux" />
-
       {/* Contenu principal */}
       <div className="flex flex-col justify-around items-center">
         <div className="mt-4 flex flex-col gap-6 w-[90%]">
@@ -131,7 +129,12 @@ const AdminUsers = () => {
                             >
                               supprimer
                             </Button>
-                            <Button className="text-red-700 mr-2 bg-white border border-red-500 hover:bg-red-400 hover:text-black">
+                            <Button
+                              onClick={() =>
+                                navigate(`/Admin/Places/modifier/${place._id}`)
+                              }
+                              className="text-red-700 mr-2 bg-white border border-red-500 hover:bg-red-400 hover:text-black"
+                            >
                               modifier
                             </Button>
                           </>
@@ -141,7 +144,10 @@ const AdminUsers = () => {
                   ))}
                   {filteredPlaces.length === 0 && (
                     <tr>
-                      <td colSpan="4" className="text-center py-4 text-gray-500">
+                      <td
+                        colSpan="4"
+                        className="text-center py-4 text-gray-500"
+                      >
                         Aucun Lieu trouvé
                       </td>
                     </tr>
@@ -156,4 +162,4 @@ const AdminUsers = () => {
   );
 };
 
-export default AdminUsers;
+export default AdminPlaces;

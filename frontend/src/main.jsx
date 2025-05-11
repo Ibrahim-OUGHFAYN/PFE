@@ -15,7 +15,7 @@ import Forget from "./pages/Forget";
 import Reset from "./pages/Reset";
 import Guides from "./pages/Guides";
 import Footer from "./components1/Footer";
-import AdminHome from "./Admin/Admin";
+import AdminHome from "./Admin/HomeAdmin";
 import Profile from "./pages/ProfileGuide";
 import Places from "./pages/Places";
 import UpdateProfile from "./pages/UpdateProfile";
@@ -95,27 +95,28 @@ const MainRoutes = () => {
           element={user ? <Navigate to="/" /> : <Reset />}
         />
         {/* Public  */}
-        <Route path="/Guides" element={<Guides />} />
+        <Route path="/guides" element={<Guides />} />
         <Route path="/Places" element={<Places />} />
         <Route path="/update-profile" element={<UpdateProfile />} />
-        <Route path="/Guides/Profile" element={<Profile />} />
+        <Route path="/guides/Profile" element={<Profile />} />
         {/* Admin  */}
         <Route
           path="/Admin"
-          element={isAdmin ? <AdminHome /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/Admin/Users"
-          element={isAdmin ? <AdminUsers /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/Admin/Places"
-          element={isAdmin ? <AdminPlaces /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/Admin/Places/AddPlace"
-          element={isAdmin ? <AddPlace /> : <Navigate to="/" />}
-        />
+          element={
+            isAdmin ? <AdminHome  name={user?.name} /> : <Navigate to="/" />
+          }
+        >
+          <Route
+            index
+            element={<div>Bienvenue dans le tableau de bord admin</div>}
+          />
+          <Route path="Users" element={<AdminUsers />} />
+          <Route path="Places" element={<AdminPlaces />} />
+          <Route path="Places/AddPlace" element={<AddPlace />} />
+          <Route path="Logout" element={<div>Déconnexion...</div>} />
+          <Route path="Places/modifier/:id" element={<AddPlace />} />
+        </Route>
+
         {/*guide*/}
         <Route
           path="/Guide"

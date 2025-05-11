@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -27,7 +28,7 @@ const userSchema = new mongoose.Schema({
       return this.role === "guide";
     },
   },
-  imgUrl: { type: String, default: "/assets/defaultUserImage.jpg" },
+  imgUrl: { type: String, default: process.env.DEFAULT_USER_IMG_URL},
 });
 
 module.exports = mongoose.model("User", userSchema);

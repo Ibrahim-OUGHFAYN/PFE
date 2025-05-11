@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Search } from "lucide-react";
-import HeaderAdmin from "./HeaderAdmin";
+import HeaderAdmin from "./HomeAdmin";
 import { Button } from "@/components/ui/button";
 
 const title = "Gérer utilisateurs";
@@ -19,7 +19,9 @@ const AdminUsers = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?");
+    const confirmDelete = window.confirm(
+      "Êtes-vous sûr de vouloir supprimer cet utilisateur ?"
+    );
     if (!confirmDelete) return;
 
     try {
@@ -41,8 +43,6 @@ const AdminUsers = () => {
 
   return (
     <>
-      <HeaderAdmin name={title} />
-
       {/* Contenu principal */}
       <div className="flex flex-col justify-around items-center">
         <div className="mt-4 flex flex-col gap-6 w-[90%]">
@@ -79,6 +79,9 @@ const AdminUsers = () => {
               <thead className="bg-red-100">
                 <tr>
                   <th className="px-6 py-3 text-xs font-medium text-left text-gray-500 uppercase">
+                    profile
+                  </th>
+                  <th className="px-6 py-3 text-xs font-medium text-left text-gray-500 uppercase">
                     nom d'utilisateur
                   </th>
                   <th className="px-6 py-3 text-xs font-medium text-left text-gray-500 uppercase">
@@ -95,6 +98,13 @@ const AdminUsers = () => {
               <tbody>
                 {filteredUsers.map((user) => (
                   <tr key={user._id} className="bg-white border-b">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                      <img
+                        src={user.imgUrl}
+                        alt="place image"
+                        className="w-10 h-10 rounded-full"
+                      />
+                    </td>
                     <td className="px-6 py-4 text-sm font-medium text-gray-900">
                       {user.name}
                     </td>

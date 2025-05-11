@@ -2,19 +2,27 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
-// You can pass `loggedIn` as a prop or get it from context/auth
-const Contact = (loggedIn) => {
+import {useState,useEffect} from "react"
+import UseUserStore from "../Store/UseUserStore"
+const Contact = () => {
+  const [loggedIn,setLoggedIn]=useState(false)
+  const { user } = UseUserStore();
+  useEffect(() => {
+    if (user) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  }, [user]);
   return (
     <div id="contact">
       <div className="md:px-36 px-8 md:py-20 py-0 flex flex-col gap-4">
-        <div className="mb-10">
+        <div className="mb-5">
           <h2 className="text-2xl text-center font-bold text-red-900">
             Contactez nous
           </h2>
         </div>
-
-        {loggedIn && (
+        {!loggedIn && (
           <>
             <div className="flex lg:flex-row flex-row grid-cols-2 gap-4">
               <Input placeholder="Nom" className=" hover:border-red-500"/>

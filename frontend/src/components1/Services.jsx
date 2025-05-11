@@ -1,6 +1,6 @@
 import GI from "../assets/guidesimg.jpg";
 import PI from "../assets/placesimg.jpg";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 
 const cardData = [
   {
@@ -9,6 +9,7 @@ const cardData = [
     description:
       "écouvrir les lieux touristiques du Maroc, c'est plonger dans une richesse culturelle et naturelle exceptionnelle. Des médinas historiques aux plages d'Agadir, chaque région offre une expérience unique.",
     imageUrl: PI,
+    to:"/places"
   },
   {
     id: 2,
@@ -16,6 +17,7 @@ const cardData = [
     description:
       "Explorez le Maroc autrement grâce à nos guides touristiques, riches en découvertes uniques, conseils pratiques et lieux incontournables, pour une expérience authentique et mémorable. Cliquez ici pour explorer.",
     imageUrl: GI,
+    to:"/guides"
   },
 ];
 
@@ -35,6 +37,7 @@ const Services = () => {
             title={card.title}
             description={card.description}
             imageUrl={card.imageUrl}
+            to={card.to}
           />
         ))}
       </div>
@@ -42,7 +45,7 @@ const Services = () => {
   );
 };
 
-const Card = ({ title, description, imageUrl }) => {
+const Card = ({ title, description, imageUrl,to }) => {
   return (
     <div className="relative flex flex-col max-w-sm w-full rounded-xl bg-gradient-to-br from-white to-gray-50 text-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mx-auto border">
       <div className="relative mx-4 -mt-6 h-40 overflow-hidden rounded-xl shadow-lg">
@@ -61,10 +64,12 @@ const Card = ({ title, description, imageUrl }) => {
         </p>
       </div>
       <div className="p-6 pt-0">
-      <Link
-  to="/Guides"
-  className="group relative w-full inline-flex items-center justify-center px-6 py-3 sm:py-3.5 font-bold text-white rounded-lg bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 shadow-lg shadow-red-500/30 hover:shadow-red-500/40 transition-all duration-300 hover:-translate-y-0.5"
->          <span className="flex items-center gap-2">
+        <Link
+          to={to}
+          className="group relative w-full inline-flex items-center justify-center px-6 py-3 sm:py-3.5 font-bold text-white rounded-lg bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 shadow-lg shadow-red-500/30 hover:shadow-red-500/40 transition-all duration-300 hover:-translate-y-0.5"
+        >
+          {" "}
+          <span className="flex items-center gap-2">
             aller
             <svg
               viewBox="0 0 24 24"
@@ -80,11 +85,10 @@ const Card = ({ title, description, imageUrl }) => {
               />
             </svg>
           </span>
-          </Link>
+        </Link>
       </div>
     </div>
   );
 };
-
 
 export default Services;
