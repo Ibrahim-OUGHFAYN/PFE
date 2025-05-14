@@ -104,7 +104,7 @@ const AddPlaceForm = () => {
     <>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-5 bg-white p-6 rounded-lg shadow-md w-full max-w-xl mx-auto mt-5 border hover:shadow-2xl hover:shadow-red-300 transition duration-300 border-red-500"
+        className="flex flex-col gap-5 bg-white p-6 rounded-lg  w-full max-w-xl mx-auto mt-5 transition duration-300 "
       >
         <input
           type="text"

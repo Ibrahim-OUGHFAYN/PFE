@@ -20,12 +20,12 @@ const AdminHome = ({ name }) => {
       </div>
 
       {/* Main layout */}
-      <div className="flex w-full flex-grow gap-4">
+      <div className="flex w-full flex-grow ">
         {/* Sidebar */}
-        <Card className="hidden md:flex w-[20%] p-4 flex-col rounded-md items-center gap-4 h-fit">
+        <Card className="hidden md:flex w-[20%] p-4 flex-col items-center gap-5 h-fit rounded-r-none shadow-none">
           <LogoComp />
           <NavLink to="/Admin/Users" className="w-full">
-            <Button className="w-full py-2 bg-gray-400 text-white">Gérer utilisateurs</Button>
+            <Button className="w-full py-2 bg-gray-400 text-white ">Gérer utilisateurs</Button>
           </NavLink>
           <NavLink to="/Admin/Places" className="w-full">
             <Button className="w-full py-2 bg-gray-400 text-white">Gérer lieux</Button>
@@ -36,7 +36,7 @@ const AdminHome = ({ name }) => {
         </Card>
 
         {/* Main content area */}
-        <div className="flex-2 bg-white border border-gray-200 p-2 mb-6 rounded-md">
+        <div className="flex-2 bg-white border border-gray-200 p-2 mb-6 rounded-l-none rounded-r-md">
           <Outlet />
         </div>
       </div>

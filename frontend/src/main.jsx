@@ -28,6 +28,12 @@ import AdminPlaces from "./Admin/AdminPlaces";
 import AddPlace from "./Admin/AddUpdatePlace";
 import Loader from "./Loader";
 import GuideHome from "./guide/GuideHome";
+import GuideAventures from "./guide/GuideAventures";
+import GuideContactes from "./guide/GuideContactes";
+import GuideDesponibilities from "./guide/GuideDesponibilities";
+import GuideReservations from "./guide/GuideReservations";
+import GuideProfile from "./guide/Profile";
+import CompleteGuideProfile from "./pages/completeProfieGuide";
 
 const MainRoutes = () => {
   const user = UseUserStore((state) => state.user);
@@ -98,13 +104,13 @@ const MainRoutes = () => {
         <Route path="/guides" element={<Guides />} />
         <Route path="/Places" element={<Places />} />
         <Route path="/update-profile" element={<UpdateProfile />} />
-        <Route path="/guides/Profile" element={<Profile />} />
+        <Route path="/guides/:id" element={<Profile />} />
+        <Route path="/complete-guide-profile" element={<CompleteGuideProfile />} />
+
         {/* Admin  */}
         <Route
           path="/Admin"
-          element={
-            isAdmin ? <AdminHome  name={user?.name} /> : <Navigate to="/" />
-          }
+          element={isAdmin ? <AdminHome name={user?.name} /> : <Navigate to="/" />}
         >
           <Route
             index
@@ -117,11 +123,22 @@ const MainRoutes = () => {
           <Route path="Places/modifier/:id" element={<AddPlace />} />
         </Route>
 
-        {/*guide*/}
+        {/* Guide */}
         <Route
           path="/Guide"
           element={isGuide ? <GuideHome /> : <Navigate to="/" />}
-        />
+        >
+          <Route index element={<div>Bienvenue dans le tableau de bord guide</div>} />
+          <Route path="profile" element={<GuideProfile />} />
+          <Route path="disponibilites" element={<GuideDesponibilities />} />
+          <Route path="reservations" element={<GuideReservations />} />
+          <Route path="contacts" element={<GuideContactes />} />
+          <Route path="aventures" element={<GuideAventures />} />
+          <Route path="logout" element={<div>Déconnexion...</div>} />
+        </Route>
+
+        {/* 404 fallback */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       {!hideLayout && <Footer />}
       <Toaster
@@ -134,13 +151,11 @@ const MainRoutes = () => {
   );
 };
 
-const Root = () => {
-  return (
-    <BrowserRouter>
-      <MainRoutes />
-    </BrowserRouter>
-  );
-};
+const Root = () => (
+  <BrowserRouter>
+    <MainRoutes />
+  </BrowserRouter>
+);
 
 const container = document.getElementById("root");
 if (!container._root) {

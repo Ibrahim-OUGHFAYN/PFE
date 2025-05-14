@@ -9,13 +9,11 @@ import UseUserStore from "../Store/UseUserStore";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
     role: "voyageur",
-    experience: 0,
   });
 
   const { signup } = UseUserStore();
@@ -36,6 +34,16 @@ const Register = () => {
       return;
     }
 
+    // If the role is guide, navigate to the complete profile page
+    if (formData.role === "guide") {
+      // Pass the registration data to the complete profile page
+      navigate("/complete-guide-profile", {
+        state: { registrationData: formData },
+      });
+      return;
+    }
+
+    // For regular users, complete the registration
     const result = await signup(formData);
 
     if (result.success) {
@@ -54,31 +62,17 @@ const Register = () => {
             S'inscrire
           </h2>
           <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label htmlFor="firstname">Prénom</Label>
-                <Input
-                  id="firstname"
-                  type="text"
-                  value={formData.firstname}
-                  onChange={handleChange}
-                  required
-                  placeholder="Prenom"
-                  className="hover:border-red-500"
-                />
-              </div>
-              <div>
-                <Label htmlFor="lastname">Nom</Label>
-                <Input
-                  id="lastname"
-                  type="text"
-                  value={formData.lastname}
-                  onChange={handleChange}
-                  required
-                  placeholder="Nom"
-                  className="hover:border-red-500"
-                />
-              </div>
+            <div>
+              <Label htmlFor="name">nom complete</Label>
+              <Input
+                id="name"
+                type="text"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                placeholder="nom"
+                className="hover:border-red-500"
+              />
             </div>
             <div className="mt-3">
               <Label htmlFor="email">E-mail</Label>
@@ -140,9 +134,7 @@ const Register = () => {
                 <button
                   type="button"
                   className="absolute right-3 top-3"
-                  onClick={() =>
-                    setShowConfirmPassword(!showConfirmPassword)
-                  }
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
                     <EyeOff size={20} />
@@ -156,7 +148,7 @@ const Register = () => {
               className="w-full mt-4 bg-red-500 hover:bg-red-600"
               type="submit"
             >
-              S'inscrire
+              {formData.role === "guide" ? "Continuer" : "S'inscrire"}
             </Button>
           </form>
           <br />

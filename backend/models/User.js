@@ -10,6 +10,15 @@ const userSchema = new mongoose.Schema({
     enum: ["voyageur", "guide", "admin"],
     default: "voyageur",
   },
+  imgUrl: { type: String, default: process.env.DEFAULT_USER_IMG_URL},
+
+  //for guides
+  Langues:{
+    type:[String],
+    required: function () {
+      return this.role === "guide";
+    },
+  },
   experience: {
     type: Number,
     required: function () {
@@ -28,7 +37,12 @@ const userSchema = new mongoose.Schema({
       return this.role === "guide";
     },
   },
-  imgUrl: { type: String, default: process.env.DEFAULT_USER_IMG_URL},
+  ville: {
+    type: String,
+    required: function () {
+      return this.role === "guide";
+    },
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

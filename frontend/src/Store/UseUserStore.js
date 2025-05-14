@@ -80,6 +80,37 @@ const UseUserStore = create((set) => ({
       };
     }
   },
+
+  completeGuideRegistration: async (formData) => {
+    try {
+      // Use FormData to handle file uploads
+      // formData should already be a FormData object from the CompleteGuideProfile component
+      console.log("form to send ",formData)
+      const response = await axios.post(
+        "http://localhost:5000/api/user/complete-guide-profile",
+        formData,
+        { 
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      if (response.status === 201 || response.status === 200) {
+        set({ user: response.data });
+        return { success: true };
+      } else {
+        return { success: false, message: "Erreur lors de la complétion du profil guide." };
+      }
+    } catch (error) {
+      console.error("Erreur lors de la complétion du profil guide:", error);
+      return {
+        success: false,
+        message: error.response?.data?.message || "Une erreur est survenue lors de la complétion du profil guide.",
+      };
+    }
+  }
 }));
 
 export default UseUserStore;

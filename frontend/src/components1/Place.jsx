@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Place({ _id, nom, description, images }) {
   return (
-    <Card className="w-full max-w-xs border rounded-xl shadow-md flex flex-col justify-center border-red-200 hover:shadow-2xl hover:shadow-red-300 transition duration-200">
+    <Card className="w-full max-w-xs border rounded-xl shadow-none flex flex-col justify-center border-red-200  transition duration-200">
       <CardContent>
         <div className="h-40 bg-gray-200  rounded-md">
           <img src={images[0]} alt={nom} className="w-full h-full rounded-md" />

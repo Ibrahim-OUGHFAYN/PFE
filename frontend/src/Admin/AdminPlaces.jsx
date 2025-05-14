@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Search, Plus, Loader } from "lucide-react"; // Import Loader from lucide-react
-import HeaderAdmin from "./HomeAdmin";
+import { Trash2, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -122,22 +122,24 @@ const AdminPlaces = () => {
                         {deleteLoading ? (
                           <Loader className="w-4 h-4 text-gray-500 animate-spin" />
                         ) : (
-                          <>
+                          <div className="flex flex-wrap gap-2">
                             <Button
                               onClick={() => handleDelete(place._id)}
-                              className="text-red-700 mr-2 bg-white border border-red-500 hover:bg-red-400 hover:text-black"
+                              className="flex items-center gap-2 text-red-700 mr-2 bg-white border border-red-500 hover:bg-red-400 hover:text-black"
                             >
-                              supprimer
+                              <Trash2 className="w-4 h-4" />
+                              Supprimer
                             </Button>
                             <Button
                               onClick={() =>
                                 navigate(`/Admin/Places/modifier/${place._id}`)
                               }
-                              className="text-red-700 mr-2 bg-white border border-red-500 hover:bg-red-400 hover:text-black"
+                              className="flex items-center gap-2 text-green-700 mr-2 bg-white border border-green-500 hover:bg-green-400 hover:text-black"
                             >
-                              modifier
+                              <Pencil className="w-4 h-4" />
+                              Modifier
                             </Button>
-                          </>
+                          </div>
                         )}
                       </td>
                     </tr>

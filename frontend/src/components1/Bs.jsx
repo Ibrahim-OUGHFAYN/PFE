@@ -55,7 +55,7 @@ export default function Bs({ onNavigate }) {
           Explorer Maroc
         </Button>
         <Button
-          onClick={() => handleClick("/Guides")}
+          onClick={() => handleClick("/guides")}
           variant="ghost"
           className="transition hover:text-red-500"
         >

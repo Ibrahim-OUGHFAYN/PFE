@@ -198,20 +198,23 @@ const updatePlace = async (req, res) => {
   }
 };
 
-//get place by id -the id is in the url
+//get guide by id -the id is in the url
 
-const getPlaceById = async (req, res) => {
+const getGuideById = async (req, res) => {
   try {
-    const place = await Lieu.findById(req.params.id);
-    if (!place) {
-      return res.status(404).json({ error: "Place not found" });
+    const guide = await User.findOne({ _id: req.params.id, role: "guide" });
+
+    if (!guide) {
+      return res.status(404).json({ error: "Guide not found" });
     }
-    res.status(200).json(place);
+
+    res.status(200).json(guide);
   } catch (error) {
-    console.error("Error fetching place by ID:", error);
+    console.error("Error fetching guide by ID:", error);
     res.status(500).json({ error: "Server error" });
   }
 };
+
 
 
 
@@ -220,5 +223,5 @@ module.exports = {
   SupLieuParId,
   AddPlace,
   updatePlace,
-  getPlaceById,
+  getGuideById
 };

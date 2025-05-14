@@ -2,7 +2,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Globe, Briefcase, MessageCircle } from "lucide-react";
-import img from "../assets/ayoub.png";
+
 
 
 
@@ -14,15 +14,15 @@ export default function ProfileGuide({Guide}) {
         {/* img */}
         <div className="w-24 h-24 rounded-full bg-gray-300 mx-auto md:mx-0">
           <img
-            src={img}
-            alt={Guide.nom}
+            src={Guide.imgUrl}
+            alt={Guide.name}
             className="rounded-full border-1 border-red-500"
           />
         </div>
 
         {/* Info */}
         <div className="flex flex-col gap-2 mt-2 mx-auto md:mx-0 items-center ">
-          <h2 className="h-3 w-40 ml-0 font-bold">{Guide.nom}</h2>
+          <h2 className="h-3 w-40 ml-0 font-bold">{Guide.name}</h2>
           <h2 className="h-3 w-40 text-red-800">{Guide.ville}</h2>
           {/* Buttons */}
           <div className="flex gap-2 mt-3 flex-wrap ">
@@ -51,10 +51,10 @@ export default function ProfileGuide({Guide}) {
             Langues
           </span>
           <div className="flex flex-wrap justify-center w-40">
-            {Guide.langues.map((lang, key) => (
+           {Guide.Langues.map((lang, key) => (
               <span key={key}>
                 {lang}
-                {key !== Guide.langues.length - 1 && ", "}
+                {key !== Guide.Langues.length - 1 && ", "}
               </span>
             ))}
           </div>
@@ -66,7 +66,7 @@ export default function ProfileGuide({Guide}) {
           <span className="text-sm  mt-1 font-bold text-red-700">
             Guide Depuis
           </span>
-          <span className="text-sm text-gray-700 mt-1">{Guide.exp} ans</span>
+          <span className="text-sm text-gray-700 mt-1">{Guide.experience} ans</span>
         </div>
 
         {/* avis */}
@@ -75,9 +75,9 @@ export default function ProfileGuide({Guide}) {
           <span className="text-sm mt-1 font-bold text-red-700">
             Avis
           </span>
-          <span className="text-sm text-gray-700 mt-1">
+          {/* <span className="text-sm text-gray-700 mt-1">
             {Guide.aviss.length}
-          </span>
+          </span> */}
         </div>
       </div>
     </Card>

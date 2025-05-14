@@ -9,9 +9,9 @@ const Guides = () => {
 
 
   useEffect(() => {
-    axios.get("https://reqres.in/api/users") // replace with your actual endpoint
+    axios.get("http://localhost:5000/api/guides")
       .then(response => {
-        setGuides(response.data.data);
+        setGuides(response.data);
       })
       .catch(error => {
         console.error("Failed to fetch guides:", error);
@@ -19,7 +19,7 @@ const Guides = () => {
   }, []);
 
   const filteredGuides = guides.filter((guide) =>
-    `${guide.first_name} ${guide.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
+    `${guide.name}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -30,7 +30,7 @@ const Guides = () => {
 
       <div className="flex flex-wrap justify-center mt-[170px] gap-6">
         {filteredGuides.map((guide) => (
-          <Guide key={guide.id} {...guide} />
+          <Guide key={guide._id} {...guide} />
         ))}
       </div>
     </div>
