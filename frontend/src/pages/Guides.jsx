@@ -19,7 +19,8 @@ const Guides = () => {
   }, []);
 
   const filteredGuides = guides.filter((guide) =>
-    `${guide.name}`.toLowerCase().includes(searchTerm.toLowerCase())
+    `${guide.name}`.toLowerCase().includes(searchTerm.toLowerCase())||
+    `${guide.ville}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (

@@ -48,7 +48,10 @@ const AddPlaceForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (isNaN(parseFloat(latitude)) || isNaN(parseFloat(longitude))) {
+      toast.error("La latitude et la longitude doivent être des nombres.");
+      return;
+    }
     const formData = new FormData();
     formData.append("nom", nom);
     formData.append("latitude", latitude);
@@ -81,13 +84,9 @@ const AddPlaceForm = () => {
         );
         toast.success("Lieu mis à jour avec succès !");
       } else {
-        await axios.post(
-          "http://localhost:5000/api/places/Add",
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
+        await axios.post("http://localhost:5000/api/places/Add", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         toast.success("Lieu ajouté avec succès !");
       }
       navigate("/Admin/Places");
@@ -165,7 +164,9 @@ const AddPlaceForm = () => {
               {images.map((img, index) => (
                 <div key={index} className="relative">
                   <img
-                    src={typeof img === "string" ? img : URL.createObjectURL(img)}
+                    src={
+                      typeof img === "string" ? img : URL.createObjectURL(img)
+                    }
                     alt={`preview-${index}`}
                     className="w-full h-32 object-cover rounded-md border"
                   />

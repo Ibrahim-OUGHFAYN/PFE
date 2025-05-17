@@ -33,12 +33,12 @@ const UseUserStore = create((set) => ({
   signup: async (formData) => {
     try {
       const payload = {
-        name: `${formData.firstname} ${formData.lastname}`,
-        email: formData.email,
-        password: formData.password,
-        role: formData.role,
-        experience: formData.experience,
-      };
+      name: formData.name, // 👈 Use the `name` field directly
+      email: formData.email,
+      password: formData.password,
+      role: formData.role,
+      experience: formData.experience,
+    };
 
       const response = await axios.post(
         "http://localhost:5000/api/user/signup",

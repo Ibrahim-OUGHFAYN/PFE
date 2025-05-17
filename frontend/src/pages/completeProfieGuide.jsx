@@ -6,15 +6,19 @@ import { Label } from "@/components/ui/label";
 import MultiSelectDropdown from "../components1/MultiSelect";
 import { useNavigate, useLocation } from "react-router-dom";
 import UseUserStore from "../Store/UseUserStore";
+import toast from 'react-hot-toast';
+
 
 const CompleteGuideProfile = () => {
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
   const { completeGuideRegistration } = UseUserStore();
-  
+
   // Get registration data passed from the Register component
   const basicRegistrationData = location.state?.registrationData || null;
-  
+
   // If no data was passed, redirect back to registration
   useEffect(() => {
     if (!basicRegistrationData) {
@@ -50,7 +54,7 @@ const CompleteGuideProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    setLoading(true);
     try {
       // Create FormData object for file upload
       const data = new FormData();
@@ -63,12 +67,12 @@ const CompleteGuideProfile = () => {
           data.append(key, value);
         }
       });
-      
+
       // Call complete registration API
       const result = await completeGuideRegistration(data);
-      
+
       if (result.success) {
-        alert("Guide registration completed successfully!");
+        toast.success("l'inscription est complete avec succes");
         navigate("/");
       } else {
         alert(result.message || "Failed to complete registration");
@@ -76,6 +80,8 @@ const CompleteGuideProfile = () => {
     } catch (error) {
       console.error("Error completing guide registration:", error);
       alert("An error occurred while completing registration");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,9 +106,9 @@ const CompleteGuideProfile = () => {
                 required
               >
                 <option value="">Selectionnez votre ville</option>
-                <option value="Paris">Paris</option>
-                <option value="Lyon">Lyon</option>
-                <option value="Marseille">Marseille</option>
+                <option value="ouarzazate">ouarzazate</option>
+                <option value="marrakech">marrakech</option>
+                <option value="zagora">zagora</option>
               </select>
             </div>
 
@@ -153,8 +159,12 @@ const CompleteGuideProfile = () => {
               )}
             </div>
 
-            <Button className="w-full bg-red-500 hover:bg-red-300" type="submit">
-              Complete Registration
+            <Button
+              className="w-full bg-red-500 hover:bg-red-300"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "Complete Registration"}
             </Button>
           </form>
         </CardContent>

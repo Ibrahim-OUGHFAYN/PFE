@@ -9,7 +9,7 @@ import UseUserStore from "../Store/UseUserStore";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    name: "", // full name (nom complet)
     email: "",
     password: "",
     confirmPassword: "",
@@ -34,16 +34,13 @@ const Register = () => {
       return;
     }
 
-    // If the role is guide, navigate to the complete profile page
     if (formData.role === "guide") {
-      // Pass the registration data to the complete profile page
       navigate("/complete-guide-profile", {
         state: { registrationData: formData },
       });
       return;
     }
 
-    // For regular users, complete the registration
     const result = await signup(formData);
 
     if (result.success) {
@@ -63,14 +60,14 @@ const Register = () => {
           </h2>
           <form onSubmit={handleSubmit}>
             <div>
-              <Label htmlFor="name">nom complete</Label>
+              <Label htmlFor="name">Nom complet</Label>
               <Input
                 id="name"
                 type="text"
                 value={formData.name}
                 onChange={handleChange}
                 required
-                placeholder="nom"
+                placeholder="Nom complet"
                 className="hover:border-red-500"
               />
             </div>
@@ -87,7 +84,7 @@ const Register = () => {
               />
             </div>
             <div className="mt-3">
-              <Label htmlFor="role">Le rôle</Label>
+              <Label htmlFor="role">Rôle</Label>
               <select
                 id="role"
                 value={formData.role}
@@ -128,7 +125,7 @@ const Register = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required
-                  placeholder="Mot de passe"
+                  placeholder="Confirmer le mot de passe"
                   className="hover:border-red-500"
                 />
                 <button
@@ -136,11 +133,7 @@ const Register = () => {
                   className="absolute right-3 top-3"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
-                  {showConfirmPassword ? (
-                    <EyeOff size={20} />
-                  ) : (
-                    <Eye size={20} />
-                  )}
+                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
             </div>
@@ -153,7 +146,7 @@ const Register = () => {
           </form>
           <br />
           <div className="text-center">
-            J'ai déjà un compte ?
+            Vous avez déjà un compte ?
             <Link to="/login" className="underline text-red-500 ml-1">
               Se connecter
             </Link>
