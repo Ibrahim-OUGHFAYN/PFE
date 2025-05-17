@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams,Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -55,7 +55,6 @@ const ProfileGuidePage = () => {
           idguide: id,
           text: "",
         });
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -95,10 +94,12 @@ const ProfileGuidePage = () => {
   if (!user)
     return (
       <div className="flex justify-center items-center h-screen flex-col">
-        <h1 className="font-bold">vous devez vous connecter avec nous{" "}</h1>
+        <h1 className="font-bold">vous devez vous connecter avec nous </h1>
         <br />
         <Link to="/Login">
-          <Button className="bg-red-500 hover:bg-white border hover:border-red-500 hover:text-black">connectez-vous maintenant</Button>
+          <Button className="bg-red-500 hover:bg-white border hover:border-red-500 hover:text-black">
+            connectez-vous maintenant
+          </Button>
         </Link>
       </div>
     );
@@ -187,12 +188,17 @@ const ProfileGuidePage = () => {
           <h1 className="text-2xl text-red-800 font-bold text-center mb-4">
             Les avis
           </h1>
-          <div className="w-full p-4 space-y-6">
+
+          {reviews.length === 0 ? (
+            <p className="text-center text-gray-600 text-lg">
+              Il n’y a aucun avis. Soyez le premier à laisser un avis !
+            </p>
+          ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {displayedReviews.map((item) => (
                 <Card
                   key={item._id || Math.random()}
-                  className="rounded-2xl shadow-md border border-red-300"
+                  className="rounded-2xl  border border-red-300"
                 >
                   <CardContent className="p-6">
                     <div className="flex flex-wrap gap-3">
@@ -205,7 +211,6 @@ const ProfileGuidePage = () => {
                         {item.voyageurName || "Anonyme"}
                       </h2>
                     </div>
-
                     <p>{item.text}</p>
                     <p className="text-sm text-gray-500 mt-2">
                       {formatDateDDMMYYYY(item.date)}
@@ -214,56 +219,56 @@ const ProfileGuidePage = () => {
                 </Card>
               ))}
             </div>
+          )}
 
-            {reviews.length > 5 && (
-              <div className="flex justify-center">
-                <Button
-                  onClick={() => setShowAllReviews(!showAllReviews)}
-                  className="mt-4 bg-red-500 hover:bg-red-600 text-white"
-                >
-                  {showAllReviews ? "Voir moins" : "Voir tout"}
-                </Button>
-              </div>
-            )}
-
-            {/* Review Form */}
-            <div className="w-full flex justify-center mt-8">
-              <form
-                onSubmit={handleReviewSubmit}
-                className="w-full bg-white p-6 rounded-xl shadow-md border border-gray-200 space-y-4"
+          {reviews.length > 5 && (
+            <div className="flex justify-center">
+              <Button
+                onClick={() => setShowAllReviews(!showAllReviews)}
+                className="mt-4 bg-red-500 hover:bg-red-600 text-white"
               >
-                <h2 className="text-xl font-bold text-slate-800">
-                  Laisser un avis
-                </h2>
-                <textarea
-                  name="text"
-                  value={formData.text}
-                  onChange={handleReviewChange}
-                  placeholder="Votre avis"
-                  className="w-full border p-2 rounded-md"
-                  required
-                  rows={4}
-                />
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 disabled:opacity-50"
-                >
-                  {submitting ? "Envoi..." : "Envoyer"}
-                </button>
-              </form>
+                {showAllReviews ? "Voir moins" : "Voir tout"}
+              </Button>
             </div>
+          )}
+
+          {/* Review Form */}
+          <div className="w-full flex justify-center mt-8">
+            <form
+              onSubmit={handleReviewSubmit}
+              className="w-full bg-white p-6 rounded-xl border border-gray-200 space-y-4"
+            >
+              <h2 className="text-xl font-bold text-slate-800">
+                Laisser un avis
+              </h2>
+              <textarea
+                name="text"
+                value={formData.text}
+                onChange={handleReviewChange}
+                placeholder="Votre avis"
+                className="w-full border p-2 rounded-md"
+                required
+                rows={4}
+              />
+              <button
+                type="submit"
+                disabled={submitting}
+                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 disabled:opacity-50"
+              >
+                {submitting ? "Envoi..." : "Envoyer"}
+              </button>
+            </form>
           </div>
         </div>
+      </div>
 
-        {/* Carousel Section */}
-        <div className="w-full">
-          <h1 className="text-2xl text-red-800 font-bold text-center mb-4">
-            Les aventures
-          </h1>
-          <div className="w-full bg-gray-100 h-100 rounded-xl flex items-center justify-center text-gray-500">
-            <Carousel />
-          </div>
+      {/* Carousel Section */}
+      <div className="w-full">
+        <h1 className="text-2xl text-red-800 font-bold text-center mb-4">
+          Les aventures
+        </h1>
+        <div className="w-full bg-gray-100 h-100 rounded-xl flex items-center justify-center text-gray-500">
+          <Carousel />
         </div>
       </div>
     </div>

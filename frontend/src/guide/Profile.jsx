@@ -11,9 +11,6 @@ export default function GuideProfileForm() {
   const languageOptions = [
     "Français",
     "Anglais",
-    "Espagnol",
-    "Allemand",
-    "Italien",
     "tamazight",
     "arabic",
   ];

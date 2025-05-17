@@ -115,7 +115,7 @@ const CompleteGuideProfile = () => {
             <div className="space-y-2">
               <Label>Langues</Label>
               <MultiSelectDropdown
-                options={["Français", "Anglais", "Espagnol", "Allemand"]}
+                options={["Français", "Anglais", "arabic", "tamazight"]}
                 selected={formData.Langues}
                 setSelected={handleLanguagesChange}
               />
