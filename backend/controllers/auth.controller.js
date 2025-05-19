@@ -86,6 +86,7 @@ const login = async (req, res) => {
       email: user.email,
       imgUrl: user.imgUrl,
       role: user.role,
+      disponibilites:user.disponibilites,
     });
   } catch (error) {
     console.log("Error in login controller", error.message);

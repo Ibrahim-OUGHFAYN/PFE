@@ -15,7 +15,6 @@ const Guides = async (req, res) => {
 
 const updateGuideProfile = async (req, res) => {
   try {
-    console.log("lookatthis=>",req.user.userId,"<=")
     const guide = await User.findById(req.user.userId);
     if (!guide)
       return res.status(404).json({ message: "Utilisateur introuvable" });

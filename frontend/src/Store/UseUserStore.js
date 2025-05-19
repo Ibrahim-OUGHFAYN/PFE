@@ -10,6 +10,7 @@ const UseUserStore = create((set) => ({
       const res = await axios.get("http://localhost:5000/api/user/me", {
         withCredentials: true,
       });
+      console.log("the current user",res.data)
       set({ user: res.data });
     } catch (err) {
       set({ user: null });
