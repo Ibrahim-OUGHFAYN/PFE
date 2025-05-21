@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
 import MultiSelectDropdown from "../components1/MultiSelect";
 import { ImageUp } from "lucide-react";
+import axios from "axios"; // Import axios
 
 export default function GuideProfileForm() {
   const languageOptions = [
@@ -91,9 +92,6 @@ export default function GuideProfileForm() {
       data.append("experience", formData.experience);
 
       // Handle languages correctly - send as stringified array
-      const languesArray = formData.Langues.split(",").map((lang) =>
-        lang.trim()
-      );
       data.append("Langues", JSON.stringify(selectedLangues));
 
       // Append image if exists
@@ -108,28 +106,29 @@ export default function GuideProfileForm() {
         email: formData.email,
         ville: formData.ville,
         experience: formData.experience,
-        Langues: languesArray,
+        Langues: selectedLangues,
       });
+      
+      // Using axios instead of fetch
+      const response = await axios.put(
+        "http://localhost:5000/api/guides/update", 
+        data,
+        {
+          withCredentials: true, // For cookies/auth (equivalent to credentials: "include")
+          headers: {
+            // No need to set Content-Type, axios sets it automatically with FormData
+          }
+        }
+      );
 
-      const res = await fetch("http://localhost:5000/api/guides/update", {
-        method: "PUT",
-        credentials: "include", // Important for cookies/auth
-        body: data,
-        // Don't set Content-Type header - FormData sets it automatically with boundary
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || "Erreur lors de la mise à jour");
-      }
-
-      const result = await res.json();
-      setUser(result.guide);
+      setUser(response.data.guide);
       toast.success("Profil mis à jour avec succès !");
     } catch (err) {
       console.error("Error updating profile:", err);
-      setError(err.message);
-      toast.error(err.message);
+      // Handle axios error response
+      const errorMessage = err.response?.data?.message || err.message || "Erreur lors de la mise à jour";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -197,8 +196,7 @@ export default function GuideProfileForm() {
             onChange={handleChange}
             required
             disabled={isLoading}
-                        className="mt-1 rounded-md"
-
+            className="mt-1 rounded-md"
           />
         </div>
         <div>
@@ -209,8 +207,7 @@ export default function GuideProfileForm() {
             onChange={handleChange}
             required
             disabled={isLoading}
-                        className="mt-1 rounded-md"
-
+            className="mt-1 rounded-md"
           />
         </div>
         <div>
@@ -232,8 +229,7 @@ export default function GuideProfileForm() {
             onChange={handleChange}
             min="0"
             disabled={isLoading}
-                        className="mt-1 rounded-md"
-
+            className="mt-1 rounded-md"
           />
         </div>
       </div>

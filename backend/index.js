@@ -38,7 +38,9 @@ const UsersRoutes = require("./routes/UsersRoutes");
 const PlacesRoutes = require("./routes/PlacesRoutes");
 const Guidesroutes =require("./routes/GuidesRoutes")
 const AvisRoutes=require("./routes/AvisRoutes")
+const ResRoutes=require("./routes/ReservationRoutes")
 
+app.use("/api/reservations",ResRoutes)
 app.use("/api/avis",AvisRoutes)
 app.use("/api/user", AuthRoutes);
 app.use("/api/users", UsersRoutes);

@@ -136,12 +136,14 @@ const ProfileGuidePage = () => {
                   >
                     Contacter
                   </Button>
-                  <Button
-                    className="bg-red-500 hover:bg-red-400 rounded-sm"
-                    size="sm"
-                  >
-                    Réserver
-                  </Button>
+                  <Link to={`/guides/reservation/${id}`}>
+                    <Button
+                      className="bg-red-500 hover:bg-red-400 rounded-sm"
+                      size="sm"
+                    >
+                      Réserver
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>

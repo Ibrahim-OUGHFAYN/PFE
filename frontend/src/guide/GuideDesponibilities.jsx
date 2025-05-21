@@ -31,6 +31,13 @@ export default function DisponibilitesGuide() {
   const formatDisplayDate = (date) =>
     format(date, "d MMMM yyyy", { locale: fr });
 
+  // Fonction pour désactiver les dates avant aujourd'hui
+  const disablePastDates = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Début de la journée
+    return date < today;
+  };
+
   const ajouterDisponibilites = async () => {
     if (dates.length === 0) {
       return toast.error("Veuillez choisir au moins une date");
@@ -104,6 +111,8 @@ export default function DisponibilitesGuide() {
                       initialFocus
                       locale={fr}
                       className="rounded-md border"
+                      disabled={disablePastDates} // Désactive les dates avant aujourd'hui
+                      fromDate={new Date()} // Optionnel: empêche également la navigation vers les mois passés
                     />
                   </PopoverContent>
                 </Popover>
@@ -112,6 +121,7 @@ export default function DisponibilitesGuide() {
 
             {/* Affichage des dates sélectionnées */}
             {dates.length > 0 && (
+              <div className="flex flex-col gap-2">
               <div className=" p-3 rounded-md border">
                 <p className="text-sm text-gray-600 mb-2">
                   Dates sélectionnées:
@@ -132,16 +142,17 @@ export default function DisponibilitesGuide() {
                     </Badge>
                   ))}
                 </div>
+               
               </div>
+               <Button
+                  onClick={ajouterDisponibilites}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white"
+                  disabled={dates.length === 0}
+                >
+                  Ajouter
+                </Button>
+                </div>
             )}
-
-            <Button
-              onClick={ajouterDisponibilites}
-              className="w-full bg-red-600 hover:bg-red-700 text-white"
-              disabled={dates.length === 0}
-            >
-              Ajouter
-            </Button>
           </CardContent>
         </Card>
 

@@ -34,6 +34,7 @@ import GuideDesponibilities from "./guide/GuideDesponibilities";
 import GuideReservations from "./guide/GuideReservations";
 import GuideProfile from "./guide/Profile";
 import CompleteGuideProfile from "./pages/completeProfieGuide";
+import Reservation from "./pages/reservation";
 
 const MainRoutes = () => {
   const user = UseUserStore((state) => state.user);
@@ -105,12 +106,18 @@ const MainRoutes = () => {
         <Route path="/Places" element={<Places />} />
         <Route path="/update-profile" element={<UpdateProfile />} />
         <Route path="/guides/:id" element={<Profile />} />
-        <Route path="/complete-guide-profile" element={<CompleteGuideProfile />} />
+        <Route
+          path="/complete-guide-profile"
+          element={<CompleteGuideProfile />}
+        />
+        <Route path="/guides/reservation/:id" element={<Reservation />} />
 
         {/* Admin  */}
         <Route
           path="/Admin"
-          element={isAdmin ? <AdminHome name={user?.name} /> : <Navigate to="/" />}
+          element={
+            isAdmin ? <AdminHome name={user?.name} /> : <Navigate to="/" />
+          }
         >
           <Route
             index
@@ -128,7 +135,10 @@ const MainRoutes = () => {
           path="/Guide"
           element={isGuide ? <GuideHome /> : <Navigate to="/" />}
         >
-          <Route index element={<div>Bienvenue dans le tableau de bord guide</div>} />
+          <Route
+            index
+            element={<div>Bienvenue dans le tableau de bord guide</div>}
+          />
           <Route path="profile" element={<GuideProfile />} />
           <Route path="disponibilites" element={<GuideDesponibilities />} />
           <Route path="reservations" element={<GuideReservations />} />
