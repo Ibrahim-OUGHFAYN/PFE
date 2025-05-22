@@ -6,7 +6,6 @@ const User = require("../models/User");
 const createReservation = async (req, res) => {
   try {
     const { guideId, dates } = req.body;
-
     // Vérifier si guideId et dates sont fournis
     if (!guideId || !dates || !Array.isArray(dates) || dates.length === 0) {
       return res.status(400).json({

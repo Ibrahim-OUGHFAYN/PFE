@@ -5,7 +5,7 @@ import { Menu } from "lucide-react";
 import LogoComp from "@/components1/LogoComp";
 import UseUserStore from "@/Store/UseUserStore";
 import { useState } from "react";
-import { X } from 'lucide-react';
+import { X } from "lucide-react";
 
 const GuideHome = () => {
   const navigate = useNavigate();
@@ -33,10 +33,19 @@ const GuideHome = () => {
 
         {/* Trigger dial menu li fi mobile */}
         <div className="md:hidden">
-          <Button variant="ghost" size="icon" aria-label="Open menu" onClick={toggleMenu}>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Open menu"
+            onClick={toggleMenu}
+          >
             <div>
-              {isMenuOpen?<X className="w-6 h-6" />:<Menu className="w-6 h-6" />}
-            </div>   
+              {isMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </div>
           </Button>
         </div>
       </div>
@@ -71,6 +80,9 @@ const GuideHome = () => {
                 Aventures
               </Button>
             </NavLink>
+            <NavLink to="/Guide/avis" className="w-full">
+              <Button className="w-full bg-gray-400 text-white">Avis</Button>
+            </NavLink>
             <Button
               className="w-full bg-gray-400 text-white"
               onClick={handleLogout}
@@ -87,13 +99,19 @@ const GuideHome = () => {
         <Card className="hidden md:flex md:w-[20%] p-4 flex-col items-center gap-3 rounded-md shadow-none">
           <LogoComp />
           <NavLink to="/Guide/profile" className="w-full">
-            <Button className="w-full bg-gray-400 text-white">Gérer Profil</Button>
+            <Button className="w-full bg-gray-400 text-white">
+              Gérer Profil
+            </Button>
           </NavLink>
           <NavLink to="/Guide/disponibilites" className="w-full">
-            <Button className="w-full bg-gray-400 text-white">Disponibilités</Button>
+            <Button className="w-full bg-gray-400 text-white">
+              Disponibilités
+            </Button>
           </NavLink>
           <NavLink to="/Guide/reservations" className="w-full">
-            <Button className="w-full bg-gray-400 text-white">Réservations</Button>
+            <Button className="w-full bg-gray-400 text-white">
+              Réservations
+            </Button>
           </NavLink>
           <NavLink to="/Guide/contacts" className="w-full">
             <Button className="w-full bg-gray-400 text-white">Contacts</Button>

@@ -35,10 +35,15 @@ import GuideReservations from "./guide/GuideReservations";
 import GuideProfile from "./guide/Profile";
 import CompleteGuideProfile from "./pages/completeProfieGuide";
 import Reservation from "./pages/reservation";
+import UserReservations from "./pages/UserReservations"; 
+import GuideAvis from "./guide/GuideAvis"
+import PlaceDetails from "./pages/PlaceDetails"
 
 const MainRoutes = () => {
   const user = UseUserStore((state) => state.user);
   const fetchUser = UseUserStore((state) => state.fetchUser);
+  const fetchUserReservations = UseUserStore((state) => state.fetchUserReservations);
+  
   const location = useLocation();
   const [loading, setLoading] = useState(true);
 
@@ -47,11 +52,22 @@ const MainRoutes = () => {
       const token = Cookies.get("jwt");
       if (token) {
         await fetchUser();
+        // Only fetch reservations if user is logged in
+        if (user) {
+          await fetchUserReservations();
+        }
       }
       setLoading(false);
     };
     loadUser();
   }, []);
+
+  // Fetch reservations when user changes
+  useEffect(() => {
+    if (user) {
+      fetchUserReservations();
+    }
+  }, [user?.id]);
 
   const isAdmin = user && user.role === "admin";
   const isGuide = user && user.role === "guide";
@@ -111,6 +127,17 @@ const MainRoutes = () => {
           element={<CompleteGuideProfile />}
         />
         <Route path="/guides/reservation/:id" element={<Reservation />} />
+        
+        {/* Add user reservations route */}
+        <Route 
+          path="/reservations" 
+          element={user ? <UserReservations /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/Places/:id" 
+          element={user ? <PlaceDetails /> : <Navigate to="/login" />} 
+        />
+
 
         {/* Admin  */}
         <Route
@@ -144,6 +171,7 @@ const MainRoutes = () => {
           <Route path="reservations" element={<GuideReservations />} />
           <Route path="contacts" element={<GuideContactes />} />
           <Route path="aventures" element={<GuideAventures />} />
+          <Route path="avis" element={<GuideAvis />} />
           <Route path="logout" element={<div>Déconnexion...</div>} />
         </Route>
 

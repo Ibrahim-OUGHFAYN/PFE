@@ -12,12 +12,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Loader from "../Loader";
+import { CalendarCheck } from "lucide-react";
 
 const Header = () => {
-  const { user, logout, fetchUser } = UseUserStore();
+  const { user, logout, fetchUser, reservations, fetchUserReservations } =
+    UseUserStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [scrolled, setScrolled] = useState(false);
+  const [hasReservations, setHasReservations] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,6 +32,26 @@ const Header = () => {
     };
     loadUser();
   }, []);
+
+  // Add a separate effect for fetching reservations
+  useEffect(() => {
+    const fetchReservations = async () => {
+      if (user) {
+        console.log("Fetching reservations for user:", user.id);
+        const result = await fetchUserReservations();
+        console.log("Fetch result:", result);
+        setHasReservations(
+          result.success && result.data && result.data.length > 0
+        );
+      }
+    };
+    fetchReservations();
+  }, [user, fetchUserReservations]);
+
+  // Check for reservations when they change in the store
+  useEffect(() => {
+    setHasReservations(reservations && reservations.length > 0);
+  }, [reservations]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,6 +82,11 @@ const Header = () => {
   const handleLogout = async () => {
     await logout();
     navigate("/");
+  };
+
+  const goToReservations = () => {
+    navigate("/reservations");
+    setIsMenuOpen(false);
   };
 
   const ProfileDropdown = () => (
@@ -104,7 +132,7 @@ const Header = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-between p-4 w-full max-w-15xl border  transition duration-300 ${
+      className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-between p-4 w-full max-w-15xl border transition duration-300 ${
         scrolled ? "border-b-1 rounded-b-3xl bg-neutral-50 " : "border-gray-50"
       }`}
     >
@@ -145,7 +173,18 @@ const Header = () => {
             Contact
           </Button>
           {user ? (
-            <ProfileDropdown />
+            <>
+              {hasReservations && (
+                <Button
+                  className="bg-white hover:bg-red-300 text-white border border-red-400"
+                  onClick={goToReservations}
+                >
+                  <CalendarCheck></CalendarCheck>
+                  Mes réservations
+                </Button>
+              )}
+              <ProfileDropdown />
+            </>
           ) : (
             <>
               <Button
@@ -195,7 +234,18 @@ const Header = () => {
         </Button>
         <Bs />
         {user ? (
-          <ProfileDropdown />
+          <>
+            {hasReservations && (
+              <Button
+                className="bg-white hover:bg-red-300 text-black border-2 border-red-400 rounded-full"
+                onClick={() => navigate("/reservations")}
+              >
+                <CalendarCheck></CalendarCheck>
+                Mes réservations
+              </Button>
+            )}
+            <ProfileDropdown />
+          </>
         ) : (
           <>
             <Button

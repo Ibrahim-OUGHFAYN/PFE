@@ -5,6 +5,7 @@ const {Guides, getGuideById, updateGuideProfile} = require("../controllers/Guide
 const {updateDisponibilitesGuide,getDisponibilitesGuide} = require("../controllers/despo.controller");
 const {getResbyGuide} = require("../controllers/reservation.controller")
 const authMiddleware = require("../middlware/authMiddleware");
+const {getAvisByAuthenticatedGuide,deleteAvis} = require("../controllers/Avis.controller")
 const multer = require("multer");
 
 // Configure multer for memory storage (since you use streamifier)
@@ -14,6 +15,8 @@ router.get("/", Guides);
 router.get("/reservations",authMiddleware,getResbyGuide)
 router.put("/update", authMiddleware, upload.single('file'), updateGuideProfile);
 router.put("/despo", authMiddleware, updateDisponibilitesGuide);
+router.get("/avis",authMiddleware,getAvisByAuthenticatedGuide)
+router.get("/avis/:avisId",authMiddleware,deleteAvis)
 router.get("/despopourvoyageurs/:guideId",getDisponibilitesGuide)
 router.get("/:id", getGuideById);
 

@@ -107,7 +107,7 @@ const ProfileGuidePage = () => {
   if (!guide)
     return (
       <div className="flex justify-center items-center h-screen">
-        Guide not found
+        tsennat chwiyya
       </div>
     );
 
