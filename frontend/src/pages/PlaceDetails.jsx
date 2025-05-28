@@ -84,8 +84,9 @@ const PlaceDetails = () => {
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Section Images */}
-          <div className="lg:col-span-2">
+          {/* Section Images et Carte */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Section Images */}
             <div className="bg-white rounded-xl border overflow-hidden">
               {/* Image principale */}
               <div className="relative h-96 bg-gray-200">
@@ -146,7 +147,7 @@ const PlaceDetails = () => {
                         onClick={() => goToImage(index)}
                         className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
                           currentImageIndex === index 
-                            ? 'border-blue-500' 
+                            ? 'border-red-500' 
                             : 'border-gray-200 hover:border-gray-300'
                         }`}
                       >
@@ -166,20 +167,6 @@ const PlaceDetails = () => {
                 </div>
               )}
             </div>
-          </div>
-
-          {/* Informations du lieu */}
-          <div className="space-y-6">
-            
-            {/* Description */}
-            <div className="bg-white rounded-xl border p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Description
-              </h2>
-              <p className="text-gray-700 leading-relaxed">
-                {place.description}
-              </p>
-            </div>
 
             {/* Carte */}
             <div className="bg-white rounded-xl border p-6">
@@ -197,8 +184,22 @@ const PlaceDetails = () => {
                 />
               </div>
               <div className="mt-3 text-sm text-gray-600">
-                <p>📍 Coordonnées: {place.latitude}, {place.longitude}</p>
+                <p>Coordonnées: {place.latitude}, {place.longitude}</p>
               </div>
+            </div>
+          </div>
+
+          {/* Informations du lieu */}
+          <div className="space-y-6">
+            
+            {/* Description */}
+            <div className="bg-white rounded-xl border p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Description
+              </h2>
+              <p className="text-gray-700 leading-relaxed">
+                {place.description}
+              </p>
             </div>
           </div>
         </div>
