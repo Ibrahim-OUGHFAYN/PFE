@@ -97,7 +97,7 @@ const UserReservations = () => {
               </Button>
               <Button 
                 className="bg-red-500 hover:bg-red-600 text-white text-xs py-1 h-8"
-                onClick={() => navigate(`/guides/${reservation.guideId._id}`)}
+                onClick={() => navigate(`/contactGuides/${reservation.guideId._id}`)}
               >
                 contacter le guide
               </Button>

@@ -113,7 +113,7 @@ const GuideHome = () => {
               Réservations
             </Button>
           </NavLink>
-          <NavLink to="/Guide/contacts" className="w-full">
+          <NavLink to="/Guide/listcontactforguide" className="w-full">
             <Button className="w-full bg-gray-400 text-white">Contacts</Button>
           </NavLink>
           <NavLink to="/Guide/aventures" className="w-full">

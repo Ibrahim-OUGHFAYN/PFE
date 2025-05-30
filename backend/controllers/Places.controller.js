@@ -1,4 +1,4 @@
-const cloudinary = require("../config/Cloudinary.js"); // Ensure Cloudinary is required
+const cloudinary = require("../config/Cloudinary.js"); 
 const Lieu = require("../models/Place.js");
 const fs = require("fs");
 

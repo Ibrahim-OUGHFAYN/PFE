@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Loader from "../Loader";
 import { CalendarCheck } from "lucide-react";
+import { MessagesSquare } from "lucide-react";
 
 const Header = () => {
   const { user, logout, fetchUser, reservations, fetchUserReservations } =
@@ -176,13 +177,23 @@ const Header = () => {
             <>
               {hasReservations && (
                 <Button
-                  className="bg-white hover:bg-red-300 text-white border border-red-400"
+                  className="bg-white hover:bg-red-300 text-black border border-red-400"
                   onClick={goToReservations}
                 >
                   <CalendarCheck></CalendarCheck>
                   Mes réservations
                 </Button>
               )}
+              <Button
+                className="bg-white hover:bg-red-300 text-black border border-red-400"
+                onClick={() => {
+                  navigate("/listcontact");
+                  setIsMenuOpen(false);
+                }}
+              >
+                <MessagesSquare  />
+                Mes contacts
+              </Button>
               <ProfileDropdown />
             </>
           ) : (
@@ -244,6 +255,16 @@ const Header = () => {
                 Mes réservations
               </Button>
             )}
+            <Button
+              className="bg-white hover:bg-red-300 text-black border-2 border-red-400 rounded-full"
+              onClick={() => {
+                navigate("/listcontact");
+                setIsMenuOpen(false);
+              }}
+            >
+              <MessagesSquare  />
+              Mes contacts
+            </Button>
             <ProfileDropdown />
           </>
         ) : (

@@ -130,12 +130,15 @@ const ProfileGuidePage = () => {
                 <h2 className="h-3 w-40 ml-0 font-bold">{guide.name}</h2>
                 <h2 className="h-3 w-40 text-red-800">{guide.ville}</h2>
                 <div className="flex gap-2 mt-3 flex-wrap">
-                  <Button
-                    className="bg-red-500 hover:bg-red-400 rounded-sm"
-                    size="sm"
-                  >
-                    Contacter
-                  </Button>
+
+                  <Link to={`/contactGuides/${id}`}>
+                    <Button
+                      className="bg-red-500 hover:bg-red-400 rounded-sm"
+                      size="sm"
+                    >
+                      Contacter
+                    </Button>
+                  </Link>
                   <Link to={`/guides/reservation/${id}`}>
                     <Button
                       className="bg-red-500 hover:bg-red-400 rounded-sm"

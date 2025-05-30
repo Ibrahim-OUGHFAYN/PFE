@@ -39,6 +39,8 @@ const PlacesRoutes = require("./routes/PlacesRoutes");
 const Guidesroutes =require("./routes/GuidesRoutes")
 const AvisRoutes=require("./routes/AvisRoutes")
 const ResRoutes=require("./routes/ReservationRoutes")
+const AventuresRoutes = require("./routes/AventuresRoutes");
+const ContactesRoutes = require("./routes/ContactRoutes")
 
 app.use("/api/reservations",ResRoutes)
 app.use("/api/avis",AvisRoutes)
@@ -46,6 +48,8 @@ app.use("/api/user", AuthRoutes);
 app.use("/api/users", UsersRoutes);
 app.use("/api/places", PlacesRoutes);
 app.use("/api/guides",Guidesroutes)
+app.use("/api",AventuresRoutes)
+app.use("/api",ContactesRoutes)
 
 
 

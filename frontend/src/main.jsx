@@ -38,6 +38,8 @@ import Reservation from "./pages/reservation";
 import UserReservations from "./pages/UserReservations"; 
 import GuideAvis from "./guide/GuideAvis"
 import PlaceDetails from "./pages/PlaceDetails"
+import ContactGuide from "./pages/ContactGuide"
+import ListContact from "./pages/ListContact";
 
 const MainRoutes = () => {
   const user = UseUserStore((state) => state.user);
@@ -122,6 +124,7 @@ const MainRoutes = () => {
         <Route path="/Places" element={<Places />} />
         <Route path="/update-profile" element={<UpdateProfile />} />
         <Route path="/guides/:id" element={<Profile />} />
+
         <Route
           path="/complete-guide-profile"
           element={<CompleteGuideProfile />}
@@ -136,6 +139,14 @@ const MainRoutes = () => {
         <Route 
           path="/Places/:id" 
           element={user ? <PlaceDetails /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/contactGuides/:guideId" 
+          element={user ? <ContactGuide /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/listcontact" 
+          element={user ? <ListContact /> : <Navigate to="/login" />} 
         />
 
 
@@ -169,10 +180,10 @@ const MainRoutes = () => {
           <Route path="profile" element={<GuideProfile />} />
           <Route path="disponibilites" element={<GuideDesponibilities />} />
           <Route path="reservations" element={<GuideReservations />} />
-          <Route path="contacts" element={<GuideContactes />} />
           <Route path="aventures" element={<GuideAventures />} />
           <Route path="avis" element={<GuideAvis />} />
           <Route path="logout" element={<div>Déconnexion...</div>} />
+          <Route path="listcontactforguide" element={<GuideContactes />} />
         </Route>
 
         {/* 404 fallback */}

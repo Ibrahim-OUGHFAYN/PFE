@@ -4,10 +4,24 @@ import { useParams } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import useUserStore from "../Store/UseUserStore";
 
 const Reservation = () => {
+  const { fetchUserReservations } = useUserStore();
   const [availabilities, setAvailabilities] = useState([]);
   const [filteredAvailabilities, setFilteredAvailabilities] = useState([]);
   const [selectedDatesMap, setSelectedDatesMap] = useState(new Map());
@@ -39,7 +53,7 @@ const Reservation = () => {
     return {
       month: date.getMonth(),
       year: date.getFullYear(),
-      label: date.toLocaleString('fr-FR', { month: 'long', year: 'numeric' })
+      label: date.toLocaleString("fr-FR", { month: "long", year: "numeric" }),
     };
   };
 
@@ -83,15 +97,15 @@ const Reservation = () => {
 
           // Convert to array and sort chronologically
           const monthsArray = Object.entries(months).map(([key, label]) => {
-            const [year, month] = key.split('-').map(Number);
+            const [year, month] = key.split("-").map(Number);
             return { key, label, year, month };
           });
-          
+
           monthsArray.sort((a, b) => {
             if (a.year !== b.year) return a.year - b.year;
             return a.month - b.month;
           });
-          
+
           setAvailableMonths(monthsArray);
         } else {
           setAvailabilities([]);
@@ -137,7 +151,7 @@ const Reservation = () => {
       return;
     }
 
-    const [yearStr, monthStr] = selectedMonth.split('-');
+    const [yearStr, monthStr] = selectedMonth.split("-");
     const year = parseInt(yearStr);
     const month = parseInt(monthStr);
 
@@ -152,46 +166,50 @@ const Reservation = () => {
   // Check if selecting this date would create 5 consecutive days
   const wouldCreateConsecutiveDays = (dateStr) => {
     // Convert all selected dates to Date objects for comparison
-    const selectedDates = Array.from(selectedDatesMap.keys()).map(d => new Date(d));
-    
+    const selectedDates = Array.from(selectedDatesMap.keys()).map(
+      (d) => new Date(d)
+    );
+
     // Add the new date
     const newDate = new Date(dateStr);
     const allDates = [...selectedDates, newDate];
-    
+
     // Sort dates chronologically
     allDates.sort((a, b) => a - b);
-    
+
     // Check for consecutive sequences
     let consecutiveCount = 1;
     let maxConsecutive = 1;
-    
+
     for (let i = 1; i < allDates.length; i++) {
-      const prevDay = allDates[i-1].getDate();
-      const prevMonth = allDates[i-1].getMonth();
-      const prevYear = allDates[i-1].getFullYear();
-      
+      const prevDay = allDates[i - 1].getDate();
+      const prevMonth = allDates[i - 1].getMonth();
+      const prevYear = allDates[i - 1].getFullYear();
+
       const currDay = allDates[i].getDate();
       const currMonth = allDates[i].getMonth();
       const currYear = allDates[i].getFullYear();
-      
+
       // Check if this is the next day (accounting for month boundaries)
       const prevDate = new Date(prevYear, prevMonth, prevDay + 1);
-      if (prevDate.getDate() === currDay && 
-          prevDate.getMonth() === currMonth && 
-          prevDate.getFullYear() === currYear) {
+      if (
+        prevDate.getDate() === currDay &&
+        prevDate.getMonth() === currMonth &&
+        prevDate.getFullYear() === currYear
+      ) {
         consecutiveCount++;
         maxConsecutive = Math.max(maxConsecutive, consecutiveCount);
       } else {
         consecutiveCount = 1;
       }
     }
-    
+
     return maxConsecutive >= 5;
   };
 
   const toggleSelection = (dateStr) => {
     const newSelectedDates = new Map(selectedDatesMap);
-    
+
     if (newSelectedDates.has(dateStr)) {
       // If already selected, just remove it
       newSelectedDates.delete(dateStr);
@@ -199,14 +217,16 @@ const Reservation = () => {
     } else {
       // Check if adding this date would create 5 consecutive days
       if (wouldCreateConsecutiveDays(dateStr)) {
-        setValidationError("Impossible de sélectionner 5 jours consécutifs (comme 30, 31, 1, 2, 3)");
+        setValidationError(
+          "Impossible de sélectionner 5 jours consécutifs (comme 30, 31, 1, 2, 3)"
+        );
         return;
       }
-      
+
       // Otherwise add it
       newSelectedDates.set(dateStr, true);
     }
-    
+
     setSelectedDatesMap(newSelectedDates);
   };
 
@@ -245,6 +265,7 @@ const Reservation = () => {
     setReservationLoading(true);
     setReservationError(null);
     setReservationSuccess(false);
+    await fetchUserReservations();
 
     try {
       const response = await axios.post(
@@ -263,9 +284,8 @@ const Reservation = () => {
 
       console.log("Reservation response:", response.data);
       setReservationSuccess(true);
-
-      // Reset selected dates after successful reservation
       setSelectedDatesMap(new Map());
+      await fetchUserReservations(); // fetch updated reservations
     } catch (err) {
       console.error("Reservation error:", err);
 
@@ -289,11 +309,15 @@ const Reservation = () => {
     <div className="flex flex-col mt-30 mb-30">
       <div className="container mx-auto py-12 px-4 sm:px-6 flex-grow">
         <div className="max-w-2xl mx-auto bg-white rounded-lg p-6 ">
-          <h2 className="text-2xl font-bold mb-6 text-center">Disponibilités du guide</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">
+            Disponibilités du guide
+          </h2>
 
           {loading && (
             <div className="flex justify-center py-8">
-              <div className="text-gray-600">Chargement des disponibilités...</div>
+              <div className="text-gray-600">
+                Chargement des disponibilités...
+              </div>
             </div>
           )}
 
@@ -315,7 +339,9 @@ const Reservation = () => {
                 <div className="space-y-6">
                   {/* Month filter */}
                   <div>
-                    <label className="block text-sm font-medium mb-2">Filtrer par mois</label>
+                    <label className="block text-sm font-medium mb-2">
+                      Filtrer par mois
+                    </label>
                     <Select
                       value={selectedMonth}
                       onValueChange={setSelectedMonth}
@@ -336,12 +362,14 @@ const Reservation = () => {
 
                   {/* Selected dates counter and viewer button */}
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium">Sélectionnez vos dates</h3>
-                    
+                    <h3 className="text-sm font-medium">
+                      Sélectionnez vos dates
+                    </h3>
+
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           disabled={selectedDatesMap.size === 0}
                         >
@@ -355,14 +383,21 @@ const Reservation = () => {
                         <div className="space-y-2 mt-4">
                           {selectedDatesMap.size > 0 ? (
                             <div className="flex flex-wrap gap-2">
-                              {Array.from(selectedDatesMap.keys()).map((date, index) => (
-                                <Badge key={index} className="bg-red-500 text-primary-foreground px-3 py-1">
-                                  {formatDate(date)}
-                                </Badge>
-                              ))}
+                              {Array.from(selectedDatesMap.keys()).map(
+                                (date, index) => (
+                                  <Badge
+                                    key={index}
+                                    className="bg-red-500 text-primary-foreground px-3 py-1"
+                                  >
+                                    {formatDate(date)}
+                                  </Badge>
+                                )
+                              )}
                             </div>
                           ) : (
-                            <p className="text-gray-500 text-center">Aucune date sélectionnée</p>
+                            <p className="text-gray-500 text-center">
+                              Aucune date sélectionnée
+                            </p>
                           )}
                         </div>
                       </DialogContent>
@@ -382,7 +417,9 @@ const Reservation = () => {
                         <Badge
                           key={index}
                           variant={
-                            selectedDatesMap.has(availability) ? "default" : "outline"
+                            selectedDatesMap.has(availability)
+                              ? "default"
+                              : "outline"
                           }
                           className={`px-3 py-1 cursor-pointer hover:opacity-90 transition-all ${
                             selectedDatesMap.has(availability)
@@ -397,19 +434,23 @@ const Reservation = () => {
                     </div>
 
                     {filteredAvailabilities.length === 0 && (
-                      <p className="text-gray-500 mt-4 text-center">Aucune disponibilité pour le mois sélectionné</p>
+                      <p className="text-gray-500 mt-4 text-center">
+                        Aucune disponibilité pour le mois sélectionné
+                      </p>
                     )}
                   </div>
 
                   <div className="pt-4">
                     <Button
-                      className="w-full"
+                      className="w-full bg-white border text-black border-red-500  hover:bg-red-600 hover:text-white"
                       onClick={handleReservation}
                       disabled={
                         selectedDatesMap.size === 0 || reservationLoading
                       }
                     >
-                      {reservationLoading ? "Traitement en cours..." : "Réserver"}
+                      {reservationLoading
+                        ? "Traitement en cours..."
+                        : "Réserver"}
                     </Button>
 
                     {reservationSuccess && (
