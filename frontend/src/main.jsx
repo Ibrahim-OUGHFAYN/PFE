@@ -40,6 +40,7 @@ import GuideAvis from "./guide/GuideAvis"
 import PlaceDetails from "./pages/PlaceDetails"
 import ContactGuide from "./pages/ContactGuide"
 import ListContact from "./pages/ListContact";
+import ContactVoyageur from "./guide/messagrie";
 
 const MainRoutes = () => {
   const user = UseUserStore((state) => state.user);
@@ -184,6 +185,7 @@ const MainRoutes = () => {
           <Route path="avis" element={<GuideAvis />} />
           <Route path="logout" element={<div>Déconnexion...</div>} />
           <Route path="listcontactforguide" element={<GuideContactes />} />
+          <Route path="messagrie/:voyageurId" element={<ContactVoyageur />} />
         </Route>
 
         {/* 404 fallback */}

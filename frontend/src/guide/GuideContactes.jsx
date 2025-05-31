@@ -39,7 +39,7 @@ const VoyageursContactesParGuide = () => {
         {voyageurs.map((voyageur) => (
           <button
             key={voyageur._id}
-            onClick={() => navigate(`/contactGuides/${voyageur._id}`)}
+            onClick={() => navigate(`/Guide/messagrie/${voyageur._id}`)}
             className="w-full text-left px-4 py-3 hover:bg-red-50 flex items-center gap-4 cursor-pointer"
           >
             <img

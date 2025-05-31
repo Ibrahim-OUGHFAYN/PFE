@@ -15,16 +15,16 @@ const voyageurContacteGuide = async (req, res) => {
     }
 
     const nouveauContact = new Contact({
-      voyageur: voyageurId,
-      guide: guideId,
+      sender: voyageurId,    // voyageur sends
+      receiver: guideId,     // guide receives
       text: text.trim()
     });
 
     const contactSauvegarde = await nouveauContact.save();
 
     await contactSauvegarde.populate([
-      { path: 'voyageur', select: 'name email' },
-      { path: 'guide', select: 'name email ville' }
+      { path: 'sender', select: 'name email imgUrl' },
+      { path: 'receiver', select: 'name email ville imgUrl' }
     ]);
 
     res.status(201).json({
@@ -57,16 +57,16 @@ const guideContacteVoyageur = async (req, res) => {
     }
 
     const nouveauContact = new Contact({
-      voyageur: voyageurId,
-      guide: guideId,
+      sender: guideId,       // guide sends
+      receiver: voyageurId,  // voyageur receives
       text: text.trim()
     });
 
     const contactSauvegarde = await nouveauContact.save();
 
     await contactSauvegarde.populate([
-      { path: 'voyageur', select: 'name email' },
-      { path: 'guide', select: 'name email ville' }
+      { path: 'sender', select: 'name email ville imgUrl' },
+      { path: 'receiver', select: 'name email imgUrl' }
     ]);
 
     res.status(201).json({
@@ -91,30 +91,31 @@ const obtenirMesContacts = async (req, res) => {
 
     const contacts = await Contact.find({
       $or: [
-        { voyageur: utilisateurConnecteId },
-        { guide: utilisateurConnecteId }
+        { sender: utilisateurConnecteId },
+        { receiver: utilisateurConnecteId }
       ]
     })
-    .populate('voyageur', 'name email imgUrl')
-    .populate('guide', 'name email imgUrl ville')
+    .populate('sender', 'name email imgUrl ville')
+    .populate('receiver', 'name email imgUrl ville')
     .sort({ dateEnvoi: -1 });
 
     const contactsFormated = contacts.map(contact => ({
       _id: contact._id,
       text: contact.text,
       dateEnvoi: contact.dateEnvoi,
-      voyageur: {
-        _id: contact.voyageur._id,
-        name: contact.voyageur.name,
-        email: contact.voyageur.email,
-        imgUrl: contact.voyageur.imgUrl
+      sender: {
+        _id: contact.sender._id,
+        name: contact.sender.name,
+        email: contact.sender.email,
+        imgUrl: contact.sender.imgUrl,
+        ville: contact.sender.ville
       },
-      guide: {
-        _id: contact.guide._id,
-        name: contact.guide.name,
-        email: contact.guide.email,
-        imgUrl: contact.guide.imgUrl,
-        ville: contact.guide.ville
+      receiver: {
+        _id: contact.receiver._id,
+        name: contact.receiver.name,
+        email: contact.receiver.email,
+        imgUrl: contact.receiver.imgUrl,
+        ville: contact.receiver.ville
       }
     }));
 
@@ -137,22 +138,34 @@ const getVoyageursOfGuide = async (req, res) => {
   try {
     const guideId = req.user.userId;
 
-    const voyageurs = await Contact.find({ guide: guideId })
-      .populate('voyageur', 'name imgUrl')
-      .distinct('voyageur');
+    // Find all contacts where guide is either sender or receiver
+    const contacts = await Contact.find({
+      $or: [
+        { sender: guideId },
+        { receiver: guideId }
+      ]
+    })
+    .populate('sender', 'name imgUrl')
+    .populate('receiver', 'name imgUrl');
 
-    const voyageursDetails = await Promise.all(
-      voyageurs.map(async (voyageurId) => {
-        const contact = await Contact.findOne({ voyageur: voyageurId, guide: guideId })
-          .populate('voyageur', 'name imgUrl');
-        return contact?.voyageur;
-      })
-    );
+    // Get unique voyageurs (users who are not the guide)
+    const voyageursMap = new Map();
+    
+    contacts.forEach(contact => {
+      if (contact.sender._id.toString() !== guideId) {
+        voyageursMap.set(contact.sender._id.toString(), contact.sender);
+      }
+      if (contact.receiver._id.toString() !== guideId) {
+        voyageursMap.set(contact.receiver._id.toString(), contact.receiver);
+      }
+    });
+
+    const voyageursDetails = Array.from(voyageursMap.values());
 
     res.status(200).json({
       success: true,
       message: 'Voyageurs récupérés avec succès',
-      data: voyageursDetails.filter(Boolean)
+      data: voyageursDetails
     });
 
   } catch (error) {
@@ -163,26 +176,39 @@ const getVoyageursOfGuide = async (req, res) => {
     });
   }
 };
+
 const getGuidesOfVoyageur = async (req, res) => {
   try {
     const voyageurId = req.user.userId;
 
-    const guides = await Contact.find({ voyageur: voyageurId })
-      .populate('guide', 'name imgUrl ville')
-      .distinct('guide');
+    // Find all contacts where voyageur is either sender or receiver
+    const contacts = await Contact.find({
+      $or: [
+        { sender: voyageurId },
+        { receiver: voyageurId }
+      ]
+    })
+    .populate('sender', 'name imgUrl ville')
+    .populate('receiver', 'name imgUrl ville');
 
-    const guidesDetails = await Promise.all(
-      guides.map(async (guideId) => {
-        const contact = await Contact.findOne({ guide: guideId, voyageur: voyageurId })
-          .populate('guide', 'name imgUrl ville');
-        return contact?.guide;
-      })
-    );
+    // Get unique guides (users who are not the voyageur)
+    const guidesMap = new Map();
+    
+    contacts.forEach(contact => {
+      if (contact.sender._id.toString() !== voyageurId) {
+        guidesMap.set(contact.sender._id.toString(), contact.sender);
+      }
+      if (contact.receiver._id.toString() !== voyageurId) {
+        guidesMap.set(contact.receiver._id.toString(), contact.receiver);
+      }
+    });
+
+    const guidesDetails = Array.from(guidesMap.values());
 
     res.status(200).json({
       success: true,
       message: 'Guides récupérés avec succès',
-      data: guidesDetails.filter(Boolean)
+      data: guidesDetails
     });
 
   } catch (error) {
@@ -193,7 +219,6 @@ const getGuidesOfVoyageur = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   voyageurContacteGuide,

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Diagramme de Séquence - Déconnexion</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+</head>
+<body>
+  <h2>Diagramme de Séquence - Déconnexion (Logout)</h2>
+  <div class="mermaid">
+    sequenceDiagram
+      participant Utilisateur
+      participant Frontend
+      participant Backend
+
+      Utilisateur->>Frontend: Clique sur "Déconnexion"
+      Frontend->>Backend: POST /logout
+      Backend->>Backend: Supprime le cookie JWT 
+      Backend-->>Frontend: (Déconnecté)
+      Frontend->>Utilisateur: Redirige vers page de connexion
+  </div>
+</body>
+</html>

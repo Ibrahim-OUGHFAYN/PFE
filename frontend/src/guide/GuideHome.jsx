@@ -70,7 +70,7 @@ const GuideHome = () => {
                 Réservations
               </Button>
             </NavLink>
-            <NavLink to="/Guide/contacts">
+            <NavLink to="/Guide/listcontactforguide" className="w-full">
               <Button className="w-full bg-gray-400 text-white">
                 Contacts
               </Button>
@@ -103,6 +103,7 @@ const GuideHome = () => {
               Gérer Profil
             </Button>
           </NavLink>
+
           <NavLink to="/Guide/disponibilites" className="w-full">
             <Button className="w-full bg-gray-400 text-white">
               Disponibilités

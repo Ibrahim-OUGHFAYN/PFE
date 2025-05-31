@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
 const contactSchema = new mongoose.Schema({
-  voyageur: {
+  sender: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  guide: {
+  receiver: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -20,5 +20,8 @@ const contactSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+// Add an index for better query performance
+contactSchema.index({ sender: 1, receiver: 1, dateEnvoi: -1 });
 
 module.exports = mongoose.model("Contact", contactSchema);

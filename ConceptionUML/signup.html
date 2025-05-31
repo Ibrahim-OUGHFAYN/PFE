@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Diagramme de Séquence - Inscription avec Rôle</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+</head>
+<body>
+  <h2>Diagramme de Séquence - Inscription (Voyageur vs Guide)</h2>
+  <div class="mermaid">
+    sequenceDiagram
+      participant Utilisateur
+      participant Frontend
+      participant Backend
+      participant MongoDB
+
+      Utilisateur->>Frontend: Remplit formulaire de base (nom, email, rôle)
+      Frontend->>Frontend: Vérifie rôle sélectionné
+      alt Rôle = Voyageur
+        Frontend->>Backend: POST /register { infos de base, role: "voyageur" }
+        Backend->>MongoDB: Crée utilisateur
+        MongoDB-->>Backend: OK
+        Backend-->>Frontend: Set-Cookie "token"
+        Frontend->>Utilisateur: Redirige vers dashboard voyageur
+      else Rôle = Guide
+        Frontend->>Utilisateur: Affiche formulaire complémentaire
+        Utilisateur->>Frontend: Remplit formulaire guide (ville, langues, etc.)
+        Frontend->>Backend: POST /register { infos de base + infos guide, role: "guide" }
+        Backend->>MongoDB: Crée utilisateur guide
+        MongoDB-->>Backend: OK
+        Backend-->>Frontend: Set-Cookie "token"
+        Frontend->>Utilisateur: Redirige vers dashboard guide
+      end
+  </div>
+</body>
+</html>

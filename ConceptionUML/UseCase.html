@@ -87,16 +87,20 @@
       contacterVoyageur(("Contacter voyageurs")):::usecase
       voirReservations(("Voir ses réservations")):::usecase
       authentifier(("Authentifier")):::usecase
+      aventures(("Gérer ces aventures")):::usecase
+
 
       guide --- disponibilites
       guide --- profilG
       guide --- contacterVoyageur
       guide --- voirReservations
+      guide --- aventures
 
       disponibilites -.->|«include»| authentifier
       profilG -.->|«include»| authentifier
       contacterVoyageur -.->|«include»| authentifier
       voirReservations -.->|«include»| authentifier
+      aventures -.->|«include»| authentifier
     </pre>
 
     <!-- Admin Actor Diagram -->

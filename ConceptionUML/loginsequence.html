@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Diagramme de Séquence - Login JWT</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+</head>
+<body>
+  <h2>Diagramme de Séquence - Login avec JWT et Cookie</h2>
+  <div class="mermaid">
+    sequenceDiagram
+      participant Utilisateur
+      participant Frontend
+      participant Backend
+      participant MongoDB
+
+      Utilisateur->>Frontend: Saisit email et mot de passe
+      Frontend->>Backend: POST /login { email, password }
+      Backend->>MongoDB: Cherche l'utilisateur par email
+      MongoDB-->>Backend: Utilisateur trouvé (ou non)
+      Backend->>Backend: Vérifie le mot de passe avec bcrypt
+      alt Mot de passe valide
+        Backend->>Backend: Génère JWT
+        Backend-->>Frontend: Set-Cookie "token"
+        Frontend->>Utilisateur: Redirection vers dashboard
+      else Mot de passe invalide
+        Backend-->>Frontend: 401 Unauthorized
+        Frontend->>Utilisateur: Message d'erreur
+      end
+  </div>
+</body>
+</html>
